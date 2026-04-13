@@ -15,6 +15,8 @@
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #059669; }
+        .animate-fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -24,7 +26,6 @@
         const { useState, useEffect, useMemo } = React;
 
         // --- Configuration ---
-        // ใส่ URL ที่ได้จาก Google Apps Script Deployment
         const scriptUrl = "https://script.google.com/macros/s/AKfycbwj5cx3FTjLoEnBt3w4jTfzF1GfpgPS9X-UZNZr1GpI7WI81IvHHvDc_Rwdll5sjxNgpA/exec";
         const ACCESS_PASSWORD = "xj1995";
 
@@ -50,7 +51,6 @@
             [null, "ปัตตานี", "ยะลา", "นราธิวาส"]
         ];
 
-        // --- UI Icons ---
         const Icon = ({ name, size = 20, className = "" }) => {
             const icons = {
                 Map: <path d="M14.12 3.88 16 2l5 5-5 5-1.88-1.88"/><path d="M19 16c0 1.1-.9 2-2 2H7c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2v2"/><path d="M9 10h6"/><path d="M9 14h6"/><path d="m14.5 14.5-5-5"/>,
@@ -72,6 +72,12 @@
             );
         };
 
+        const Card = ({ children, className = "" }) => (
+            <div className={`bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden ${className}`}>
+                {children}
+            </div>
+        );
+
         const App = () => {
             const [isAuthenticated, setIsAuthenticated] = useState(sessionStorage.getItem('xj95_auth') === 'true');
             const [password, setPassword] = useState('');
@@ -87,7 +93,6 @@
                     setLoading(true);
                     const res = await fetch(scriptUrl);
                     const data = await res.json();
-                    // Clean data from sheet (filter out empty rows if any)
                     setTrips(data.filter(item => item.id));
                 } catch (err) { console.error("Fetch Error:", err); }
                 finally { setLoading(false); }
@@ -112,12 +117,11 @@
                 try {
                     await fetch(scriptUrl, {
                         method: 'POST',
-                        mode: 'no-cors', // Apps Script requires no-cors for simple POSTs
+                        mode: 'no-cors',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ ...formData, action: "add" })
                     });
                     setShowModal(false);
-                    // Since no-cors doesn't return data, we wait and refresh
                     setTimeout(fetchTrips, 1500);
                 } catch (err) { console.error(err); }
             };
@@ -164,8 +168,8 @@
                 return (
                     <div className="min-h-screen bg-emerald-950 flex items-center justify-center p-6 relative overflow-hidden">
                         <Icon name="Mountain" size={300} className="absolute -bottom-20 -left-20 text-white/5 rotate-12" />
-                        <div className="max-w-md w-full text-center relative z-10">
-                            <div className="bg-white/10 w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-8 border border-white/20 backdrop-blur-xl">
+                        <div className="max-w-md w-full text-center relative z-10 animate-fade-in">
+                            <div className="bg-white/10 w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-8 border border-white/20 backdrop-blur-xl shadow-2xl">
                                 <Icon name="Compass" size={48} className="text-white animate-pulse" />
                             </div>
                             <h1 className="text-4xl font-black text-white italic tracking-tighter mb-10 uppercase">XJ95 JOURNEY</h1>
@@ -175,7 +179,7 @@
                                     <input 
                                         type="password" 
                                         required 
-                                        className="w-full p-5 rounded-2xl bg-slate-50 border-2 border-transparent focus:border-emerald-600 outline-none text-center text-2xl font-bold tracking-widest" 
+                                        className="w-full p-5 rounded-2xl bg-slate-50 border-2 border-transparent focus:border-emerald-600 outline-none text-center text-2xl font-bold tracking-widest transition-all" 
                                         value={password} 
                                         onChange={e => {setPassword(e.target.value); if(loginError) setLoginError(false);}} 
                                     />
@@ -191,7 +195,7 @@
             }
 
             return (
-                <div className="min-h-screen flex flex-col">
+                <div className="min-h-screen flex flex-col bg-slate-50">
                     <header className="bg-emerald-900 text-white sticky top-0 z-30 shadow-lg px-6 h-16 flex justify-between items-center">
                         <div className="flex items-center gap-3">
                             <Icon name="Trees" size={24} />
@@ -202,17 +206,17 @@
                         </div>
                         <div className="flex items-center gap-3">
                             <div className="bg-emerald-950/50 p-1 rounded-xl flex gap-1">
-                                <button onClick={() => setCurrentView('map')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black tracking-widest transition-all ${currentView === 'map' ? 'bg-emerald-700 text-white' : 'text-emerald-400'}`}>MAP</button>
-                                <button onClick={() => setCurrentView('feed')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black tracking-widest transition-all ${currentView === 'feed' ? 'bg-emerald-700 text-white' : 'text-emerald-400'}`}>FEED</button>
+                                <button onClick={() => setCurrentView('map')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black tracking-widest transition-all ${currentView === 'map' ? 'bg-emerald-700 text-white shadow-sm' : 'text-emerald-400'}`}>MAP</button>
+                                <button onClick={() => setCurrentView('feed')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black tracking-widest transition-all ${currentView === 'feed' ? 'bg-emerald-700 text-white shadow-sm' : 'text-emerald-400'}`}>FEED</button>
                             </div>
-                            <button onClick={() => setShowModal(true)} className="bg-white text-emerald-900 px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg active:scale-95 transition-all">+ RECORD</button>
+                            <button onClick={() => setShowModal(true)} className="bg-white text-emerald-900 px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg active:scale-95 transition-all hover:bg-emerald-50">+ RECORD</button>
                         </div>
                     </header>
 
                     <main className="max-w-6xl mx-auto w-full p-6 py-10">
-                        {/* Dashboard Stats */}
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
-                            <div className="bg-emerald-800 text-white p-6 rounded-[2rem] shadow-xl relative overflow-hidden group">
+                        {/* Summary Stats */}
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10 animate-fade-in text-slate-900">
+                            <Card className="p-6 bg-emerald-800 border-none text-white shadow-xl relative overflow-hidden group">
                                 <Icon name="Mountain" size={100} className="absolute -bottom-4 -right-4 text-white/10 group-hover:scale-110 transition-transform" />
                                 <div className="relative z-10">
                                     <p className="text-[10px] font-black text-emerald-300 uppercase mb-2 tracking-widest">Conquered</p>
@@ -222,21 +226,27 @@
                                     </div>
                                     <p className="text-[9px] mt-2 font-black uppercase opacity-60 tracking-widest">Progress: {stats.pct}%</p>
                                 </div>
-                            </div>
-                            <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
-                                <p className="text-[10px] font-black text-slate-400 uppercase mb-2 tracking-widest">Expedition Time</p>
+                            </Card>
+                            <Card className="p-6">
+                                <div className="flex justify-between items-center mb-2">
+                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Expedition Time</span>
+                                    <Icon name="Clock" size={18} className="text-emerald-700" />
+                                </div>
                                 <div className="text-3xl font-black">{stats.days} <span className="text-sm font-bold opacity-30">DAYS</span></div>
-                            </div>
-                            <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
-                                <p className="text-[10px] font-black text-slate-400 uppercase mb-2 tracking-widest">XJ95 Mileage</p>
+                            </Card>
+                            <Card className="p-6">
+                                <div className="flex justify-between items-center mb-2">
+                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">XJ95 Mileage</span>
+                                    <Icon name="Route" size={18} className="text-emerald-700" />
+                                </div>
                                 <div className="text-3xl font-black">{stats.km.toLocaleString()} <span className="text-sm font-bold opacity-30">KM</span></div>
-                            </div>
-                            <div className="bg-emerald-50 p-6 rounded-[2rem] border border-emerald-100 flex flex-col justify-center">
+                            </Card>
+                            <Card className="p-6 bg-emerald-50 border-emerald-100 flex flex-col justify-center">
                                 <p className="text-[10px] font-black text-emerald-800 uppercase mb-1 tracking-widest">Status</p>
-                                <div className="text-xl font-black italic text-emerald-900 tracking-tighter">
+                                <div className="text-xl font-black italic text-emerald-900 tracking-tighter uppercase">
                                     {stats.count > 50 ? "LEGENDARY" : stats.count > 20 ? "VETERAN" : "EXPLORER"}
                                 </div>
-                            </div>
+                            </Card>
                         </div>
 
                         {loading ? (
@@ -245,8 +255,8 @@
                                 <span className="font-black text-xs tracking-[0.3em] uppercase">Syncing Sheet Data...</span>
                             </div>
                         ) : currentView === 'map' ? (
-                            <div className="space-y-8 animate-in fade-in duration-500">
-                                <div className="bg-white p-10 rounded-[3rem] shadow-xl border border-slate-100 overflow-x-auto">
+                            <div className="space-y-8 animate-fade-in text-slate-900">
+                                <Card className="p-10 bg-white shadow-xl border-none overflow-x-auto rounded-[3rem]">
                                     <div className="min-w-[800px] flex flex-col items-center">
                                         <div className="grid gap-2">
                                             {MAP_GRID.map((row, rIdx) => (
@@ -268,31 +278,31 @@
                                             ))}
                                         </div>
                                     </div>
-                                </div>
+                                </Card>
                             </div>
                         ) : (
-                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-in fade-in duration-500">
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-fade-in text-slate-900">
                                 <div className="lg:col-span-2 space-y-6">
                                     <h2 className="text-2xl font-black text-slate-800 flex items-center gap-3 uppercase tracking-tighter italic mb-6">
                                         <Icon name="Trees" className="text-emerald-700" size={30} /> Journal Feed
                                     </h2>
                                     {trips.length === 0 ? (
-                                        <div className="text-center py-32 bg-white rounded-[3rem] border-2 border-dashed border-slate-200">
+                                        <div className="text-center py-32 bg-white rounded-[3rem] border-2 border-dashed border-slate-200 shadow-sm">
                                             <Icon name="Compass" size={60} className="text-slate-200 mx-auto mb-6" />
                                             <h3 className="text-xl font-black text-slate-400 italic uppercase">No Trail Records Found.</h3>
                                         </div>
                                     ) : (
                                         trips.map(t => (
-                                            <Card key={t.id} className="border-none shadow-md hover:shadow-xl transition-all duration-500 rounded-[2.5rem]">
+                                            <Card key={t.id} className="border-none shadow-md hover:shadow-xl transition-all duration-500 rounded-[2.5rem] group">
                                                 {t.imageUrl && (
                                                     <div className="h-[24rem] w-full overflow-hidden relative">
-                                                        <img src={t.imageUrl} className="w-full h-full object-cover" alt="" />
-                                                        <div className="absolute top-6 left-6 bg-emerald-950/80 backdrop-blur px-4 py-2 rounded-xl text-white text-[10px] font-black uppercase tracking-widest border border-white/10">
+                                                        <img src={t.imageUrl} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="" />
+                                                        <div className="absolute top-6 left-6 bg-emerald-950/80 backdrop-blur px-4 py-2 rounded-xl text-white text-[10px] font-black uppercase tracking-widest border border-white/20">
                                                             {t.province}
                                                         </div>
                                                     </div>
                                                 )}
-                                                <div className="p-10">
+                                                <div className="p-10 text-slate-900">
                                                     <div className="flex justify-between items-start mb-6">
                                                         <h3 className="text-3xl font-black text-slate-800 tracking-tighter italic uppercase">{t.title}</h3>
                                                         <button onClick={() => handleDelete(t.id)} className="p-3 text-slate-200 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all">
@@ -300,12 +310,12 @@
                                                         </button>
                                                     </div>
                                                     <div className="flex flex-wrap gap-4 text-[10px] font-black text-emerald-900 mb-8 uppercase tracking-widest">
-                                                        <div className="bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-100 flex items-center gap-2"><Icon name="Calendar" size={16}/> {t.date}</div>
-                                                        <div className="bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-100 flex items-center gap-2"><Icon name="Clock" size={16}/> {t.duration} DAYS</div>
-                                                        <div className="bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-100 flex items-center gap-2"><Icon name="Route" size={16}/> {t.distance} KM</div>
+                                                        <div className="bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-100 flex items-center gap-2 shadow-sm"><Icon name="Calendar" size={16}/> {t.date}</div>
+                                                        <div className="bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-100 flex items-center gap-2 shadow-sm"><Icon name="Clock" size={16}/> {t.duration} DAYS</div>
+                                                        <div className="bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-100 flex items-center gap-2 shadow-sm"><Icon name="Route" size={16}/> {t.distance} KM</div>
                                                     </div>
                                                     {t.notes && (
-                                                        <p className="text-slate-600 leading-relaxed font-bold bg-slate-50/50 p-8 rounded-3xl border-l-[6px] border-emerald-800 italic text-lg">
+                                                        <p className="text-slate-600 leading-relaxed font-bold bg-slate-50/50 p-8 rounded-3xl border-l-[6px] border-emerald-800 italic text-lg shadow-inner">
                                                             "{t.notes}"
                                                         </p>
                                                     )}
@@ -315,17 +325,17 @@
                                     )}
                                 </div>
                                 {/* Province Checklist Sidebar */}
-                                <div className="hidden lg:block">
+                                <div className="hidden lg:block text-slate-900">
                                     <Card className="p-8 sticky top-24 shadow-xl border-none rounded-[2.5rem]">
                                         <div className="flex items-center justify-between mb-8">
                                             <h2 className="text-xl font-black uppercase tracking-tighter italic">Expedition Log</h2>
-                                            <span className="text-[10px] font-black bg-emerald-950 text-white px-3 py-1.5 rounded-full">{stats.count}/77</span>
+                                            <span className="text-[10px] font-black bg-emerald-950 text-white px-3 py-1.5 rounded-full shadow-lg">{stats.count}/77</span>
                                         </div>
                                         <div className="space-y-2 max-h-[calc(100vh-360px)] overflow-y-auto pr-4 custom-scrollbar">
                                             {THAI_PROVINCES.map(prov => {
                                                 const count = provinceStats[prov] || 0;
                                                 return (
-                                                    <div key={prov} className={`flex items-center justify-between p-4 rounded-2xl transition-all ${count > 0 ? 'bg-emerald-900 text-white shadow-lg shadow-emerald-100' : 'text-slate-400 hover:bg-slate-100'}`}>
+                                                    <div key={prov} className={`flex items-center justify-between p-4 rounded-2xl transition-all ${count > 0 ? 'bg-emerald-900 text-white shadow-lg shadow-emerald-100' : 'text-slate-400 hover:bg-slate-50'}`}>
                                                         <span className="text-[11px] font-black uppercase tracking-tighter">{prov}</span>
                                                         {count > 0 && <span className="text-[9px] font-black bg-white/20 px-3 py-1 rounded-full">{count}X</span>}
                                                     </div>
@@ -340,8 +350,8 @@
 
                     {/* Add Modal */}
                     {showModal && (
-                        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-emerald-950/60 backdrop-blur-md animate-in fade-in duration-300">
-                            <Card className="w-full max-w-xl relative z-10 animate-in zoom-in duration-300 border-none shadow-2xl rounded-[3rem]">
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-emerald-950/60 backdrop-blur-md animate-in fade-in duration-300 text-slate-900">
+                            <Card className="w-full max-w-xl relative z-10 animate-in zoom-in duration-300 border-none shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] rounded-[3rem]">
                                 <form onSubmit={handleAdd}>
                                     <div className="p-10 bg-emerald-900 text-white flex justify-between items-center rounded-t-[3rem]">
                                         <div>
@@ -395,6 +405,11 @@
                             </Card>
                         </div>
                     )}
+
+                    {/* Mobile Floating Add Button */}
+                    <button onClick={() => setShowModal(true)} className="lg:hidden fixed bottom-8 right-8 bg-emerald-900 text-white w-20 h-20 rounded-[2rem] flex items-center justify-center shadow-[0_20px_50px_rgba(5,150,105,0.4)] z-10 active:scale-90 transition-all">
+                        <Icon name="Plus" size={40} />
+                    </button>
                 </div>
             );
         };
