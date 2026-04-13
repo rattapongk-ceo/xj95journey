@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XJ95 Journey</title>
+    <title>XJ95 Journey - Sheets Edition</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -11,9 +11,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,700;0,900;1,900&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Public Sans', sans-serif; }
+        body { font-family: 'Public Sans', sans-serif; background-color: #f8fafc; color: #0f172a; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #059669; }
     </style>
@@ -21,61 +20,13 @@
 <body>
     <div id="root"></div>
 
-    <!-- Firebase SDKs -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // --- Firebase Configuration ---
-        // หมายเหตุ: หากใช้งานจริงบน GitHub Pages โปรดตรวจสอบว่า __firebase_config ถูกตั้งค่าไว้
-        // หรือแทนที่ค่าว่างด้วย Config จาก Firebase Console ของคุณ
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
-            apiKey: "",
-            authDomain: "",
-            projectId: "",
-            storageBucket: "",
-            messagingSenderId: "",
-            appId: ""
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'xj95-journey';
-
-        // ส่งตัวแปร Firebase ไปให้ React ใช้งาน
-        window.firebaseRefs = { auth, db, appId, signInAnonymously, onAuthStateChanged, signInWithCustomToken, collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc };
-    </script>
-
     <script type="text/babel">
         const { useState, useEffect, useMemo } = React;
 
-        // Mocking Lucide icons manually for standalone compatibility
-        const Icon = ({ name, size = 24, className = "" }) => {
-            const icons = {
-                MapPin: <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />,
-                Plus: <path d="M5 12h14M12 5v14" />,
-                Trash2: <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2M10 11v6M14 11v6" />,
-                CheckCircle2: <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zM9 12l2 2 4-4" />,
-                TrendingUp: <path d="m22 7-8.5 8.5-5-5L2 17" />,
-                Clock: <circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" />,
-                Route: <circle cx="6" cy="19" r="3" /><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15" /><circle cx="18" cy="5" r="3" />,
-                Map: <path d="M14.12 3.88 16 2l5 5-5 5-1.88-1.88"/><path d="M19 16c0 1.1-.9 2-2 2H7c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2v2"/><path d="M9 10h6"/><path d="M9 14h6"/><path d="m14.5 14.5-5-5"/>,
-                LayoutList: <rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/><path d="M14 4h7"/><path d="M14 9h7"/><path d="M14 15h7"/><path d="M14 20h7"/>,
-                Trees: <path d="M10 10v.01"/><path d="M14 10v.01"/><path d="M7 6a4 4 0 0 1 10 0"/><path d="M12 2v4"/><path d="M9 22v-4h6v4"/><path d="M8 12a5 5 0 0 0-1 10h10a5 5 0 0 0-1-10h-8Z"/>,
-                Compass: <circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z"/>,
-                Mountain: <path d="m8 3 4 8 5-5 5 15H2L8 3z"/>,
-                Lock: <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>,
-                ChevronRight: <path d="m9 18 6-6-6-6"/>,
-                Calendar: <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
-            };
-            return (
-                <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-                    {icons[name]}
-                </svg>
-            );
-        };
+        // --- Configuration ---
+        // ใส่ URL ที่ได้จาก Google Apps Script Deployment
+        const scriptUrl = "https://script.google.com/macros/s/AKfycbwj5cx3FTjLoEnBt3w4jTfzF1GfpgPS9X-UZNZr1GpI7WI81IvHHvDc_Rwdll5sjxNgpA/exec";
+        const ACCESS_PASSWORD = "xj1995";
 
         const THAI_PROVINCES = ["กรุงเทพมหานคร", "กระบี่", "กาญจนบุรี", "กาฬสินธุ์", "กำแพงเพชร", "ขอนแก่น", "จันทบุรี", "ฉะเชิงเทรา", "ชลบุรี", "ชัยนาท", "ชัยภูมิ", "ชุมพร", "เชียงราย", "เชียงใหม่", "ตรัง", "ตราด", "ตาก", "นครนายก", "นครปฐม", "นครพนม", "นครราชสีมา", "นครศรีธรรมราช", "นครสวรรค์", "นนทบุรี", "นราธิวาส", "น่าน", "บึงกาฬ", "บุรีรัมย์", "ปทุมธานี", "ประจวบคีรีขันธ์", "ปราจีนบุรี", "ปัตตานี", "พระนครศรีอยุธยา", "พะเยา", "พังงา", "พัทลุง", "พิจิตร", "พิษณุโลก", "เพชรบุรี", "เพชรบูรณ์", "แพร่", "ภูเก็ต", "มหาสารคาม", "มุกดาหาร", "แม่ฮ่องสอน", "ยโสธร", "ยะลา", "ร้อยเอ็ด", "ระนอง", "ระยอง", "ราชบุรี", "ลพบุรี", "ลำปาง", "ลำพูน", "เลย", "ศรีสะเกษ", "สกลนคร", "สงขลา", "สตูล", "สมุทรปราการ", "สมุทรสงคราม", "สมุทรสาคร", "สระแก้ว", "สระบุรี", "สิงห์บุรี", "สุโขทัย", "สุพรรณบุรี", "สุราษฎร์ธานี", "สุรินทร์", "หนองคาย", "หนองบัวลำภู", "อ่างทอง", "อำนาจเจริญ", "อุดรธานี", "อุตรดิตถ์", "อุทัยธานี", "อุบลราชธานี"];
 
@@ -99,55 +50,90 @@
             [null, "ปัตตานี", "ยะลา", "นราธิวาส"]
         ];
 
-        const Card = ({ children, className = "" }) => (
-            <div className={`bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden ${className}`}>
-                {children}
-            </div>
-        );
+        // --- UI Icons ---
+        const Icon = ({ name, size = 20, className = "" }) => {
+            const icons = {
+                Map: <path d="M14.12 3.88 16 2l5 5-5 5-1.88-1.88"/><path d="M19 16c0 1.1-.9 2-2 2H7c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2v2"/><path d="M9 10h6"/><path d="M9 14h6"/><path d="m14.5 14.5-5-5"/>,
+                Mountain: <path d="m8 3 4 8 5-5 5 15H2L8 3z"/>,
+                Trees: <path d="M10 10v.01"/><path d="M14 10v.01"/><path d="M7 6a4 4 0 0 1 10 0"/><path d="M12 2v4"/><path d="M9 22v-4h6v4"/><path d="M8 12a5 5 0 0 0-1 10h10a5 5 0 0 0-1-10h-8Z"/>,
+                Compass: <circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z"/>,
+                Plus: <path d="M5 12h14M12 5v14" />,
+                Lock: <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>,
+                Trash2: <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2M10 11v6M14 11v6" />,
+                Calendar: <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><path d="M16 2v4M8 2v4M3 10h18"/>,
+                ChevronRight: <path d="m9 18 6-6-6-6"/>,
+                Clock: <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>,
+                Route: <circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/>
+            };
+            return (
+                <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                    {icons[name]}
+                </svg>
+            );
+        };
 
         const App = () => {
             const [isAuthenticated, setIsAuthenticated] = useState(sessionStorage.getItem('xj95_auth') === 'true');
-            const [passwordInput, setPasswordInput] = useState('');
+            const [password, setPassword] = useState('');
             const [loginError, setLoginError] = useState(false);
-            const [user, setUser] = useState(null);
             const [trips, setTrips] = useState([]);
             const [loading, setLoading] = useState(true);
             const [currentView, setCurrentView] = useState('map');
-            const [showAddModal, setShowAddModal] = useState(false);
+            const [showModal, setShowModal] = useState(false);
             const [formData, setFormData] = useState({ title: '', province: '', date: new Date().toISOString().split('T')[0], duration: 1, distance: 0, imageUrl: '', notes: '' });
 
-            // Firebase Integration
-            useEffect(() => {
-                if (!window.firebaseRefs) return;
-                const { auth, onAuthStateChanged, signInAnonymously } = window.firebaseRefs;
-                
-                const initAuth = async () => {
-                    try {
-                        // GitHub Pages standard anonymous auth
-                        await signInAnonymously(auth);
-                    } catch (err) { console.error("Firebase Auth Error:", err); }
-                };
-                initAuth();
-                const unsubscribe = onAuthStateChanged(auth, setUser);
-                return () => unsubscribe();
-            }, []);
+            const fetchTrips = async () => {
+                try {
+                    setLoading(true);
+                    const res = await fetch(scriptUrl);
+                    const data = await res.json();
+                    // Clean data from sheet (filter out empty rows if any)
+                    setTrips(data.filter(item => item.id));
+                } catch (err) { console.error("Fetch Error:", err); }
+                finally { setLoading(false); }
+            };
 
             useEffect(() => {
-                if (!user || !isAuthenticated || !window.firebaseRefs) return;
-                const { db, appId, collection, query, orderBy, onSnapshot } = window.firebaseRefs;
-                
-                const tripsRef = collection(db, 'artifacts', appId, 'users', user.uid, 'trips');
-                const q = query(tripsRef, orderBy('date', 'desc'));
-                
-                const unsubscribe = onSnapshot(q, (snapshot) => {
-                    setTrips(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-                    setLoading(false);
-                }, (error) => {
-                    console.error("Firestore Error:", error);
-                    setLoading(false);
-                });
-                return () => unsubscribe();
-            }, [user, isAuthenticated]);
+                if (isAuthenticated) fetchTrips();
+            }, [isAuthenticated]);
+
+            const handleLogin = (e) => {
+                e.preventDefault();
+                if (password === ACCESS_PASSWORD) {
+                    setIsAuthenticated(true);
+                    sessionStorage.setItem('xj95_auth', 'true');
+                } else {
+                    setLoginError(true);
+                }
+            };
+
+            const handleAdd = async (e) => {
+                e.preventDefault();
+                try {
+                    await fetch(scriptUrl, {
+                        method: 'POST',
+                        mode: 'no-cors', // Apps Script requires no-cors for simple POSTs
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ ...formData, action: "add" })
+                    });
+                    setShowModal(false);
+                    // Since no-cors doesn't return data, we wait and refresh
+                    setTimeout(fetchTrips, 1500);
+                } catch (err) { console.error(err); }
+            };
+
+            const handleDelete = async (id) => {
+                if (!window.confirm("ต้องการลบใช่หรือไม่?")) return;
+                try {
+                    await fetch(scriptUrl, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id, action: "delete" })
+                    });
+                    setTimeout(fetchTrips, 1000);
+                } catch (err) { console.error(err); }
+            };
 
             const provinceStats = useMemo(() => {
                 const counts = {};
@@ -158,201 +144,123 @@
             const stats = useMemo(() => {
                 const visitedCount = Object.keys(provinceStats).length;
                 return {
-                    provincesCount: visitedCount,
-                    totalDays: trips.reduce((acc, t) => acc + (Number(t.duration) || 0), 0),
-                    totalKm: trips.reduce((acc, t) => acc + (Number(t.distance) || 0), 0),
-                    percent: Math.round((visitedCount / 77) * 100)
+                    count: visitedCount,
+                    days: trips.reduce((acc, t) => acc + Number(t.duration || 0), 0),
+                    km: trips.reduce((acc, t) => acc + Number(t.distance || 0), 0),
+                    pct: Math.round((visitedCount / 77) * 100)
                 };
             }, [trips, provinceStats]);
 
-            const handleLogin = (e) => {
-                e.preventDefault();
-                if (passwordInput === 'xj1995') {
-                    setIsAuthenticated(true);
-                    sessionStorage.setItem('xj95_auth', 'true');
-                    setLoginError(false);
-                } else {
-                    setLoginError(true);
-                    setPasswordInput('');
-                }
-            };
-
-            const handleAddTrip = async (e) => {
-                e.preventDefault();
-                if (!user || !window.firebaseRefs) return;
-                const { db, appId, collection, addDoc } = window.firebaseRefs;
-                try {
-                    const tripsRef = collection(db, 'artifacts', appId, 'users', user.uid, 'trips');
-                    await addDoc(tripsRef, { ...formData, createdAt: new Date().toISOString() });
-                    setShowAddModal(false);
-                    setFormData({ title: '', province: '', date: new Date().toISOString().split('T')[0], duration: 1, distance: 0, imageUrl: '', notes: '' });
-                } catch (err) { console.error("Add Trip Error:", err); }
-            };
-
-            const deleteTrip = async (id) => {
-                if (!window.firebaseRefs) return;
-                const { db, appId, doc, deleteDoc: fbDeleteDoc } = window.firebaseRefs;
-                if (window.confirm("ต้องการลบบันทึกนี้ใช่หรือไม่?")) {
-                    try {
-                        await fbDeleteDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'trips', id));
-                    } catch (err) { console.error("Delete Trip Error:", err); }
-                }
-            };
-
-            const getHeatmapColor = (province) => {
-                const count = provinceStats[province] || 0;
-                if (count === 0) return 'bg-slate-100 text-slate-400';
-                if (count === 1) return 'bg-emerald-200 text-emerald-800 shadow-sm';
-                if (count === 2) return 'bg-emerald-400 text-emerald-900 shadow-md';
-                if (count === 3) return 'bg-emerald-600 text-white shadow-lg';
-                return 'bg-emerald-800 text-white shadow-xl ring-2 ring-emerald-900';
+            const getMapColor = (p) => {
+                const c = provinceStats[p] || 0;
+                if (c === 0) return 'bg-slate-100 text-slate-400';
+                if (c === 1) return 'bg-emerald-200 text-emerald-800 shadow-sm';
+                if (c === 2) return 'bg-emerald-400 text-emerald-900 shadow-md';
+                if (c >= 3) return 'bg-emerald-700 text-white shadow-lg ring-2 ring-emerald-900/10';
+                return 'bg-slate-100';
             };
 
             if (!isAuthenticated) {
                 return (
-                    <div className="min-h-screen bg-emerald-950 flex items-center justify-center p-6 relative overflow-hidden text-slate-900">
+                    <div className="min-h-screen bg-emerald-950 flex items-center justify-center p-6 relative overflow-hidden">
                         <Icon name="Mountain" size={300} className="absolute -bottom-20 -left-20 text-white/5 rotate-12" />
-                        <Icon name="Trees" size={200} className="absolute top-10 right-10 text-white/5 -rotate-12" />
-                        <div className="max-w-md w-full relative z-10">
-                            <div className="text-center mb-10">
-                                <div className="bg-white/10 w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-6 border border-white/20 backdrop-blur-xl">
-                                    <Icon name="Compass" size={48} className="text-white animate-pulse" />
-                                </div>
-                                <h1 className="text-4xl font-black text-white italic tracking-tighter mb-2">XJ95 JOURNEY</h1>
-                                <p className="text-emerald-400 text-xs font-bold uppercase tracking-[0.3em]">Access Restricted</p>
+                        <div className="max-w-md w-full text-center relative z-10">
+                            <div className="bg-white/10 w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-8 border border-white/20 backdrop-blur-xl">
+                                <Icon name="Compass" size={48} className="text-white animate-pulse" />
                             </div>
-                            <Card className="p-10 border-none bg-white shadow-2xl">
+                            <h1 className="text-4xl font-black text-white italic tracking-tighter mb-10 uppercase">XJ95 JOURNEY</h1>
+                            <div className="bg-white p-10 rounded-[2.5rem] shadow-2xl">
                                 <form onSubmit={handleLogin} className="space-y-6">
-                                    <div className="text-center">
-                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Enter Access Key</label>
-                                        <div className="relative group">
-                                            <Icon name="Lock" size={20} className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${loginError ? 'text-red-400' : 'text-slate-300'}`} />
-                                            <input 
-                                                type="password" 
-                                                required
-                                                className={`w-full pl-12 pr-4 py-4 rounded-2xl bg-slate-50 border-2 outline-none text-center text-2xl font-bold tracking-widest ${loginError ? 'border-red-100' : 'border-transparent focus:border-emerald-600'}`}
-                                                value={passwordInput}
-                                                onChange={(e) => { setPasswordInput(e.target.value); if(loginError) setLoginError(false); }}
-                                            />
-                                        </div>
-                                        {loginError && <p className="text-red-500 text-[10px] font-bold mt-4 uppercase tracking-wider animate-bounce">Access Denied</p>}
-                                    </div>
-                                    <button type="submit" className="w-full py-4 bg-emerald-900 text-white rounded-2xl font-black uppercase tracking-widest shadow-xl flex items-center justify-center gap-2 hover:bg-emerald-950 transition-all active:scale-95">
-                                        Authenticate <Icon name="ChevronRight" size={20} />
+                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Access Key Required</label>
+                                    <input 
+                                        type="password" 
+                                        required 
+                                        className="w-full p-5 rounded-2xl bg-slate-50 border-2 border-transparent focus:border-emerald-600 outline-none text-center text-2xl font-bold tracking-widest" 
+                                        value={password} 
+                                        onChange={e => {setPassword(e.target.value); if(loginError) setLoginError(false);}} 
+                                    />
+                                    {loginError && <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest animate-bounce">Access Denied</p>}
+                                    <button className="w-full py-5 bg-emerald-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-emerald-950 transition-all active:scale-95 shadow-xl shadow-emerald-100 flex items-center justify-center gap-2">
+                                        Authenticate <Icon name="ChevronRight" size={18} />
                                     </button>
                                 </form>
-                            </Card>
+                            </div>
                         </div>
                     </div>
                 );
             }
 
-            if (loading) return (
-                <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 text-emerald-800">
-                    <Icon name="Compass" size={48} className="animate-spin mb-4" />
-                    <span className="font-bold tracking-widest uppercase text-xs">Navigating XJ95 Expedition...</span>
-                </div>
-            );
-
             return (
-                <div className="min-h-screen bg-slate-50 text-slate-900 pb-20">
-                    {/* Header */}
-                    <header className="bg-emerald-900 text-white sticky top-0 z-20 shadow-lg">
-                        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <div className="bg-white/10 p-2 rounded-lg border border-white/20"><Icon name="Trees" size={24} /></div>
-                                <div>
-                                    <h1 className="text-xl font-black italic tracking-tighter">XJ95 JOURNEY</h1>
-                                    <p className="text-[9px] text-emerald-300 uppercase tracking-widest font-bold -mt-1">Off-road Journal</p>
-                                </div>
+                <div className="min-h-screen flex flex-col">
+                    <header className="bg-emerald-900 text-white sticky top-0 z-30 shadow-lg px-6 h-16 flex justify-between items-center">
+                        <div className="flex items-center gap-3">
+                            <Icon name="Trees" size={24} />
+                            <div>
+                                <h1 className="text-xl font-black italic tracking-tighter leading-none">XJ95 JOURNEY</h1>
+                                <p className="text-[9px] font-bold text-emerald-300 uppercase tracking-widest">Satellite Data Sync</p>
                             </div>
-                            <div className="flex items-center gap-4">
-                                <div className="hidden sm:flex bg-emerald-950 p-1 rounded-xl gap-1">
-                                    <button onClick={() => setCurrentView('map')} className={`px-4 py-2 rounded-lg text-[10px] font-black tracking-widest transition-all ${currentView === 'map' ? 'bg-emerald-700 text-white' : 'text-emerald-400 hover:text-white'}`}>
-                                        <Icon name="Map" size={14} className="inline mr-2" /> MAP
-                                    </button>
-                                    <button onClick={() => setCurrentView('timeline')} className={`px-4 py-2 rounded-lg text-[10px] font-black tracking-widest transition-all ${currentView === 'timeline' ? 'bg-emerald-700 text-white' : 'text-emerald-400 hover:text-white'}`}>
-                                        <Icon name="LayoutList" size={14} className="inline mr-2" /> FEED
-                                    </button>
-                                </div>
-                                <button onClick={() => setShowAddModal(true)} className="bg-white text-emerald-900 px-5 py-2 rounded-full font-black text-[10px] uppercase tracking-widest shadow-md hover:bg-emerald-50 active:scale-95 transition-all">
-                                    <Icon name="Plus" size={16} className="inline mr-2" /> Record
-                                </button>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <div className="bg-emerald-950/50 p-1 rounded-xl flex gap-1">
+                                <button onClick={() => setCurrentView('map')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black tracking-widest transition-all ${currentView === 'map' ? 'bg-emerald-700 text-white' : 'text-emerald-400'}`}>MAP</button>
+                                <button onClick={() => setCurrentView('feed')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black tracking-widest transition-all ${currentView === 'feed' ? 'bg-emerald-700 text-white' : 'text-emerald-400'}`}>FEED</button>
                             </div>
+                            <button onClick={() => setShowModal(true)} className="bg-white text-emerald-900 px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg active:scale-95 transition-all">+ RECORD</button>
                         </div>
                     </header>
 
-                    <main className="max-w-6xl mx-auto px-6 py-10">
-                        {/* Summary Stats */}
+                    <main className="max-w-6xl mx-auto w-full p-6 py-10">
+                        {/* Dashboard Stats */}
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
-                            <Card className="p-6 bg-emerald-800 border-none text-white shadow-xl relative overflow-hidden group">
+                            <div className="bg-emerald-800 text-white p-6 rounded-[2rem] shadow-xl relative overflow-hidden group">
                                 <Icon name="Mountain" size={100} className="absolute -bottom-4 -right-4 text-white/10 group-hover:scale-110 transition-transform" />
                                 <div className="relative z-10">
-                                    <div className="text-[10px] font-black text-emerald-300 uppercase mb-2 tracking-widest">Conquered</div>
-                                    <div className="text-4xl font-black">{stats.provincesCount} <span className="text-lg font-normal opacity-60">/ 77</span></div>
-                                    <div className="w-full bg-black/20 h-1.5 rounded-full mt-4 overflow-hidden">
-                                        <div className="bg-white h-full transition-all duration-1000" style={{ width: `${stats.percent}%` }}></div>
+                                    <p className="text-[10px] font-black text-emerald-300 uppercase mb-2 tracking-widest">Conquered</p>
+                                    <div className="text-4xl font-black">{stats.count} <span className="text-lg font-normal opacity-40">/ 77</span></div>
+                                    <div className="w-full bg-black/20 h-1 rounded-full mt-4 overflow-hidden">
+                                        <div className="bg-white h-full transition-all duration-1000" style={{ width: `${stats.pct}%` }}></div>
                                     </div>
-                                    <p className="text-[9px] mt-2 font-black uppercase opacity-80 tracking-widest">Progress: {stats.percent}%</p>
+                                    <p className="text-[9px] mt-2 font-black uppercase opacity-60 tracking-widest">Progress: {stats.pct}%</p>
                                 </div>
-                            </Card>
-                            <Card className="p-6">
-                                <div className="flex justify-between items-center mb-2">
-                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Days</span>
-                                    <Icon name="Clock" size={18} className="text-emerald-700" />
+                            </div>
+                            <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
+                                <p className="text-[10px] font-black text-slate-400 uppercase mb-2 tracking-widest">Expedition Time</p>
+                                <div className="text-3xl font-black">{stats.days} <span className="text-sm font-bold opacity-30">DAYS</span></div>
+                            </div>
+                            <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
+                                <p className="text-[10px] font-black text-slate-400 uppercase mb-2 tracking-widest">XJ95 Mileage</p>
+                                <div className="text-3xl font-black">{stats.km.toLocaleString()} <span className="text-sm font-bold opacity-30">KM</span></div>
+                            </div>
+                            <div className="bg-emerald-50 p-6 rounded-[2rem] border border-emerald-100 flex flex-col justify-center">
+                                <p className="text-[10px] font-black text-emerald-800 uppercase mb-1 tracking-widest">Status</p>
+                                <div className="text-xl font-black italic text-emerald-900 tracking-tighter">
+                                    {stats.count > 50 ? "LEGENDARY" : stats.count > 20 ? "VETERAN" : "EXPLORER"}
                                 </div>
-                                <div className="text-3xl font-black text-slate-800">{stats.totalDays} <span className="text-sm font-bold uppercase opacity-40">Days</span></div>
-                            </Card>
-                            <Card className="p-6">
-                                <div className="flex justify-between items-center mb-2">
-                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Distance</span>
-                                    <Icon name="Route" size={18} className="text-emerald-700" />
-                                </div>
-                                <div className="text-3xl font-black text-slate-800">{stats.totalKm.toLocaleString()} <span className="text-sm font-bold uppercase opacity-40">KM</span></div>
-                            </Card>
-                            <Card className="p-6 bg-emerald-50 border-emerald-100 flex flex-col justify-center">
-                                <div className="text-[10px] font-black text-emerald-800 uppercase tracking-widest mb-1">Rank</div>
-                                <div className="text-xl font-black text-emerald-900 italic tracking-tighter">
-                                    {stats.provincesCount > 50 ? "LEGENDARY EXPLORER" : stats.provincesCount > 20 ? "ADVANCED TREKKER" : "RISING EXPLORER"}
-                                </div>
-                            </Card>
+                            </div>
                         </div>
 
-                        {currentView === 'map' ? (
+                        {loading ? (
+                            <div className="flex flex-col items-center justify-center py-32 text-emerald-800 gap-4">
+                                <Icon name="Compass" size={48} className="animate-spin" />
+                                <span className="font-black text-xs tracking-[0.3em] uppercase">Syncing Sheet Data...</span>
+                            </div>
+                        ) : currentView === 'map' ? (
                             <div className="space-y-8 animate-in fade-in duration-500">
-                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">
-                                    <div>
-                                        <h2 className="text-2xl font-black text-slate-800 uppercase tracking-tighter italic">Adventure Map</h2>
-                                        <p className="text-sm text-slate-500">ความเข้มของสีตามจำนวนครั้งที่พารถ XJ95 เข้าไปสำรวจ</p>
-                                    </div>
-                                    <div className="flex flex-wrap gap-4 text-[9px] font-black uppercase tracking-widest">
-                                        <div className="flex items-center gap-2"><div className="w-4 h-4 bg-emerald-800 rounded shadow-sm"></div> 4+ Visits</div>
-                                        <div className="flex items-center gap-2"><div className="w-4 h-4 bg-emerald-600 rounded shadow-sm"></div> 3 Visits</div>
-                                        <div className="flex items-center gap-2"><div className="w-4 h-4 bg-emerald-400 rounded shadow-sm"></div> 2 Visits</div>
-                                        <div className="flex items-center gap-2"><div className="w-4 h-4 bg-emerald-200 rounded shadow-sm"></div> 1 Visit</div>
-                                        <div className="flex items-center gap-2"><div className="w-4 h-4 bg-slate-100 rounded border"></div> Unvisited</div>
-                                    </div>
-                                </div>
-
-                                <Card className="p-10 bg-white shadow-xl border-none overflow-x-auto rounded-[3rem]">
+                                <div className="bg-white p-10 rounded-[3rem] shadow-xl border border-slate-100 overflow-x-auto">
                                     <div className="min-w-[800px] flex flex-col items-center">
                                         <div className="grid gap-2">
                                             {MAP_GRID.map((row, rIdx) => (
                                                 <div key={rIdx} className="flex gap-2 justify-center">
-                                                    {row.map((province, pIdx) => {
-                                                        if (!province) return <div key={pIdx} className="w-24 h-20"></div>;
-                                                        const count = provinceStats[province] || 0;
+                                                    {row.map((p, pIdx) => {
+                                                        if (!p) return <div key={pIdx} className="w-24 h-20"></div>;
+                                                        const count = provinceStats[p] || 0;
                                                         return (
                                                             <div 
                                                                 key={pIdx} 
-                                                                className={`w-24 h-20 rounded-2xl flex flex-col items-center justify-center p-3 text-center transition-all duration-300 transform hover:-translate-y-2 group relative cursor-default ${getHeatmapColor(province)}`}
+                                                                className={`w-24 h-20 rounded-2xl flex flex-col items-center justify-center p-3 text-center transition-all duration-300 transform hover:-translate-y-2 group relative cursor-default ${getMapColor(p)}`}
                                                             >
-                                                                <span className="text-[10px] font-black leading-tight uppercase tracking-tighter">{province}</span>
-                                                                {count > 0 && <span className="text-[10px] font-black mt-1.5 opacity-60">x{count}</span>}
-                                                                {count >= 3 && <Icon name="Compass" size={14} className="absolute top-2 right-2 opacity-50" />}
-                                                                <div className="absolute bottom-full mb-3 hidden group-hover:block z-20 bg-emerald-950 text-white text-[9px] px-4 py-2 rounded-xl whitespace-nowrap shadow-2xl font-black uppercase tracking-widest border border-white/10">
-                                                                    {province}: {count} Expedition{count > 1 ? 's' : ''}
-                                                                </div>
+                                                                <span className="text-[10px] font-black leading-tight uppercase tracking-tighter">{p}</span>
+                                                                {count > 0 && <span className="text-[10px] font-black mt-1 opacity-60">x{count}</span>}
                                                             </div>
                                                         );
                                                     })}
@@ -360,47 +268,45 @@
                                             ))}
                                         </div>
                                     </div>
-                                </Card>
+                                </div>
                             </div>
                         ) : (
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-in fade-in duration-500">
-                                <div className="lg:col-span-2 space-y-8">
-                                    <h2 className="text-2xl font-black text-slate-800 flex items-center gap-3 uppercase tracking-tighter italic">
+                                <div className="lg:col-span-2 space-y-6">
+                                    <h2 className="text-2xl font-black text-slate-800 flex items-center gap-3 uppercase tracking-tighter italic mb-6">
                                         <Icon name="Trees" className="text-emerald-700" size={30} /> Journal Feed
                                     </h2>
-
                                     {trips.length === 0 ? (
                                         <div className="text-center py-32 bg-white rounded-[3rem] border-2 border-dashed border-slate-200">
                                             <Icon name="Compass" size={60} className="text-slate-200 mx-auto mb-6" />
-                                            <h3 className="text-xl font-black text-slate-400 italic uppercase">No trails recorded yet.</h3>
-                                            <p className="text-slate-400 text-xs mt-2 font-bold tracking-widest">START YOUR ENGINE AND EXPLORE THE WILD.</p>
+                                            <h3 className="text-xl font-black text-slate-400 italic uppercase">No Trail Records Found.</h3>
                                         </div>
                                     ) : (
-                                        trips.map((trip) => (
-                                            <Card key={trip.id} className="border-none shadow-md hover:shadow-2xl transition-all duration-500 rounded-[2.5rem]">
-                                                {trip.imageUrl && (
-                                                    <div className="h-[28rem] w-full overflow-hidden relative">
-                                                        <img src={trip.imageUrl} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="" />
-                                                        <div className="absolute top-6 left-6 bg-emerald-950/80 backdrop-blur px-4 py-2 rounded-xl text-white text-[10px] font-black uppercase tracking-[0.2em] border border-white/20">
-                                                            {trip.province}
+                                        trips.map(t => (
+                                            <Card key={t.id} className="border-none shadow-md hover:shadow-xl transition-all duration-500 rounded-[2.5rem]">
+                                                {t.imageUrl && (
+                                                    <div className="h-[24rem] w-full overflow-hidden relative">
+                                                        <img src={t.imageUrl} className="w-full h-full object-cover" alt="" />
+                                                        <div className="absolute top-6 left-6 bg-emerald-950/80 backdrop-blur px-4 py-2 rounded-xl text-white text-[10px] font-black uppercase tracking-widest border border-white/10">
+                                                            {t.province}
                                                         </div>
                                                     </div>
                                                 )}
                                                 <div className="p-10">
                                                     <div className="flex justify-between items-start mb-6">
-                                                        <h3 className="text-3xl font-black text-slate-800 tracking-tighter italic uppercase">{trip.title}</h3>
-                                                        <button onClick={() => deleteTrip(trip.id)} className="p-3 text-slate-200 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all">
+                                                        <h3 className="text-3xl font-black text-slate-800 tracking-tighter italic uppercase">{t.title}</h3>
+                                                        <button onClick={() => handleDelete(t.id)} className="p-3 text-slate-200 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all">
                                                             <Icon name="Trash2" size={24} />
                                                         </button>
                                                     </div>
-                                                    <div className="flex flex-wrap gap-4 text-[10px] font-black text-emerald-900 mb-8 uppercase tracking-[0.1em]">
-                                                        <div className="bg-emerald-50 px-4 py-2 rounded-xl flex items-center gap-2 border border-emerald-100"><Icon name="Calendar" size={16}/> {new Date(trip.date).toLocaleDateString('th-TH', { dateStyle: 'long' })}</div>
-                                                        <div className="bg-emerald-50 px-4 py-2 rounded-xl flex items-center gap-2 border border-emerald-100"><Icon name="Clock" size={16}/> {trip.duration} DAYS</div>
-                                                        <div className="bg-emerald-50 px-4 py-2 rounded-xl flex items-center gap-2 border border-emerald-100"><Icon name="Route" size={16}/> {trip.distance} KM</div>
+                                                    <div className="flex flex-wrap gap-4 text-[10px] font-black text-emerald-900 mb-8 uppercase tracking-widest">
+                                                        <div className="bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-100 flex items-center gap-2"><Icon name="Calendar" size={16}/> {t.date}</div>
+                                                        <div className="bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-100 flex items-center gap-2"><Icon name="Clock" size={16}/> {t.duration} DAYS</div>
+                                                        <div className="bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-100 flex items-center gap-2"><Icon name="Route" size={16}/> {t.distance} KM</div>
                                                     </div>
-                                                    {trip.notes && (
-                                                        <p className="text-slate-600 leading-[2] font-bold bg-slate-50/50 p-8 rounded-3xl border-l-[6px] border-emerald-800 italic text-lg">
-                                                            "{trip.notes}"
+                                                    {t.notes && (
+                                                        <p className="text-slate-600 leading-relaxed font-bold bg-slate-50/50 p-8 rounded-3xl border-l-[6px] border-emerald-800 italic text-lg">
+                                                            "{t.notes}"
                                                         </p>
                                                     )}
                                                 </div>
@@ -413,7 +319,7 @@
                                     <Card className="p-8 sticky top-24 shadow-xl border-none rounded-[2.5rem]">
                                         <div className="flex items-center justify-between mb-8">
                                             <h2 className="text-xl font-black uppercase tracking-tighter italic">Expedition Log</h2>
-                                            <span className="text-[10px] font-black bg-emerald-950 text-white px-3 py-1.5 rounded-full tracking-widest">{stats.provincesCount}/77</span>
+                                            <span className="text-[10px] font-black bg-emerald-950 text-white px-3 py-1.5 rounded-full">{stats.count}/77</span>
                                         </div>
                                         <div className="space-y-2 max-h-[calc(100vh-360px)] overflow-y-auto pr-4 custom-scrollbar">
                                             {THAI_PROVINCES.map(prov => {
@@ -433,17 +339,16 @@
                     </main>
 
                     {/* Add Modal */}
-                    {showAddModal && (
-                        <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
-                            <div className="absolute inset-0 bg-emerald-950/60 backdrop-blur-md animate-in fade-in duration-300" onClick={() => setShowAddModal(false)}></div>
-                            <Card className="w-full max-w-xl relative z-10 animate-in zoom-in duration-300 border-none shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] rounded-[3rem]">
-                                <form onSubmit={handleAddTrip}>
+                    {showModal && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-emerald-950/60 backdrop-blur-md animate-in fade-in duration-300">
+                            <Card className="w-full max-w-xl relative z-10 animate-in zoom-in duration-300 border-none shadow-2xl rounded-[3rem]">
+                                <form onSubmit={handleAdd}>
                                     <div className="p-10 bg-emerald-900 text-white flex justify-between items-center rounded-t-[3rem]">
                                         <div>
-                                            <h2 className="text-3xl font-black uppercase tracking-tighter italic leading-none mb-1">New Trail</h2>
+                                            <h2 className="text-3xl font-black uppercase tracking-tighter italic leading-none mb-1">New Expedition</h2>
                                             <p className="text-[10px] text-emerald-300 font-black uppercase tracking-widest">RECORDING XJ95 EXPEDITION COORDS</p>
                                         </div>
-                                        <button type="button" onClick={() => setShowAddModal(false)} className="text-white/60 hover:text-white text-4xl font-light">&times;</button>
+                                        <button type="button" onClick={() => setShowModal(false)} className="text-white/60 hover:text-white text-4xl font-light">&times;</button>
                                     </div>
                                     <div className="p-10 space-y-8 max-h-[65vh] overflow-y-auto custom-scrollbar">
                                         <div>
@@ -483,18 +388,13 @@
                                         </div>
                                     </div>
                                     <div className="p-10 bg-slate-50 flex gap-6 rounded-b-[3rem]">
-                                        <button type="button" onClick={() => setShowAddModal(false)} className="flex-1 py-4 text-slate-400 font-black uppercase tracking-widest hover:text-slate-600 transition-colors">Abort</button>
+                                        <button type="button" onClick={() => setShowModal(false)} className="flex-1 py-4 text-slate-400 font-black uppercase tracking-widest hover:text-slate-600 transition-colors">Abort</button>
                                         <button type="submit" className="flex-1 py-5 bg-emerald-900 text-white rounded-2xl font-black uppercase tracking-widest shadow-2xl shadow-emerald-200 hover:bg-emerald-950 transition-all active:scale-95">Record Trip</button>
                                     </div>
                                 </form>
                             </Card>
                         </div>
                     )}
-
-                    {/* Mobile Floating Add Button */}
-                    <button onClick={() => setShowAddModal(true)} className="lg:hidden fixed bottom-8 right-8 bg-emerald-900 text-white w-20 h-20 rounded-[2rem] flex items-center justify-center shadow-[0_20px_50px_rgba(5,150,105,0.4)] z-10 active:scale-90 transition-all">
-                        <Icon name="Plus" size={40} />
-                    </button>
                 </div>
             );
         };
