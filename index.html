@@ -51,19 +51,63 @@
             [null, "ปัตตานี", "ยะลา", "นราธิวาส"]
         ];
 
+        // --- UI Icons Component ---
         const Icon = ({ name, size = 20, className = "" }) => {
             const icons = {
-                Map: <path d="M14.12 3.88 16 2l5 5-5 5-1.88-1.88"/><path d="M19 16c0 1.1-.9 2-2 2H7c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2v2"/><path d="M9 10h6"/><path d="M9 14h6"/><path d="m14.5 14.5-5-5"/>,
+                Map: (
+                    <React.Fragment>
+                        <path d="M14.12 3.88 16 2l5 5-5 5-1.88-1.88"/>
+                        <path d="M19 16c0 1.1-.9 2-2 2H7c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2v2"/>
+                        <path d="M9 10h6"/><path d="M9 14h6"/><path d="m14.5 14.5-5-5"/>
+                    </React.Fragment>
+                ),
                 Mountain: <path d="m8 3 4 8 5-5 5 15H2L8 3z"/>,
-                Trees: <path d="M10 10v.01"/><path d="M14 10v.01"/><path d="M7 6a4 4 0 0 1 10 0"/><path d="M12 2v4"/><path d="M9 22v-4h6v4"/><path d="M8 12a5 5 0 0 0-1 10h10a5 5 0 0 0-1-10h-8Z"/>,
-                Compass: <circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z"/>,
+                Trees: (
+                    <React.Fragment>
+                        <path d="M10 10v.01"/><path d="M14 10v.01"/>
+                        <path d="M7 6a4 4 0 0 1 10 0"/><path d="M12 2v4"/>
+                        <path d="M9 22v-4h6v4"/><path d="M8 12a5 5 0 0 0-1 10h10a5 5 0 0 0-1-10h-8Z"/>
+                    </React.Fragment>
+                ),
+                Compass: (
+                    <React.Fragment>
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z"/>
+                    </React.Fragment>
+                ),
                 Plus: <path d="M5 12h14M12 5v14" />,
-                Lock: <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>,
-                Trash2: <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2M10 11v6M14 11v6" />,
-                Calendar: <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><path d="M16 2v4M8 2v4M3 10h18"/>,
+                Lock: (
+                    <React.Fragment>
+                        <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </React.Fragment>
+                ),
+                Trash2: (
+                    <React.Fragment>
+                        <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2M10 11v6M14 11v6" />
+                    </React.Fragment>
+                ),
+                Calendar: (
+                    <React.Fragment>
+                        <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                        <path d="M16 2v4M8 2v4M3 10h18"/>
+                    </React.Fragment>
+                ),
                 ChevronRight: <path d="m9 18 6-6-6-6"/>,
-                Clock: <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>,
-                Route: <circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/>
+                Clock: (
+                    <React.Fragment>
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </React.Fragment>
+                ),
+                Route: (
+                    <React.Fragment>
+                        <circle cx="6" cy="19" r="3"/>
+                        <path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/>
+                        <circle cx="18" cy="5" r="3"/>
+                    </React.Fragment>
+                ),
+                MapPin: <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
             };
             return (
                 <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -175,7 +219,7 @@
                             <h1 className="text-4xl font-black text-white italic tracking-tighter mb-10 uppercase">XJ95 JOURNEY</h1>
                             <div className="bg-white p-10 rounded-[2.5rem] shadow-2xl">
                                 <form onSubmit={handleLogin} className="space-y-6">
-                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Access Key Required</label>
+                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 text-center">Access Key Required</label>
                                     <input 
                                         type="password" 
                                         required 
@@ -183,7 +227,7 @@
                                         value={password} 
                                         onChange={e => {setPassword(e.target.value); if(loginError) setLoginError(false);}} 
                                     />
-                                    {loginError && <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest animate-bounce">Access Denied</p>}
+                                    {loginError && <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest animate-bounce text-center">Access Denied</p>}
                                     <button className="w-full py-5 bg-emerald-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-emerald-950 transition-all active:scale-95 shadow-xl shadow-emerald-100 flex items-center justify-center gap-2">
                                         Authenticate <Icon name="ChevronRight" size={18} />
                                     </button>
@@ -232,18 +276,18 @@
                                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Expedition Time</span>
                                     <Icon name="Clock" size={18} className="text-emerald-700" />
                                 </div>
-                                <div className="text-3xl font-black">{stats.days} <span className="text-sm font-bold opacity-30">DAYS</span></div>
+                                <div className="text-3xl font-black">{stats.days} <span className="text-sm font-bold opacity-30 uppercase">Days</span></div>
                             </Card>
                             <Card className="p-6">
                                 <div className="flex justify-between items-center mb-2">
                                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">XJ95 Mileage</span>
                                     <Icon name="Route" size={18} className="text-emerald-700" />
                                 </div>
-                                <div className="text-3xl font-black">{stats.km.toLocaleString()} <span className="text-sm font-bold opacity-30">KM</span></div>
+                                <div className="text-3xl font-black">{stats.km.toLocaleString()} <span className="text-sm font-bold opacity-30 uppercase">KM</span></div>
                             </Card>
                             <Card className="p-6 bg-emerald-50 border-emerald-100 flex flex-col justify-center">
                                 <p className="text-[10px] font-black text-emerald-800 uppercase mb-1 tracking-widest">Status</p>
-                                <div className="text-xl font-black italic text-emerald-900 tracking-tighter uppercase">
+                                <div className="text-xl font-black italic text-emerald-900 tracking-tighter uppercase leading-tight">
                                     {stats.count > 50 ? "LEGENDARY" : stats.count > 20 ? "VETERAN" : "EXPLORER"}
                                 </div>
                             </Card>
@@ -324,7 +368,6 @@
                                         ))
                                     )}
                                 </div>
-                                {/* Province Checklist Sidebar */}
                                 <div className="hidden lg:block text-slate-900">
                                     <Card className="p-8 sticky top-24 shadow-xl border-none rounded-[2.5rem]">
                                         <div className="flex items-center justify-between mb-8">
@@ -348,15 +391,14 @@
                         )}
                     </main>
 
-                    {/* Add Modal */}
                     {showModal && (
                         <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-emerald-950/60 backdrop-blur-md animate-in fade-in duration-300 text-slate-900">
                             <Card className="w-full max-w-xl relative z-10 animate-in zoom-in duration-300 border-none shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] rounded-[3rem]">
                                 <form onSubmit={handleAdd}>
                                     <div className="p-10 bg-emerald-900 text-white flex justify-between items-center rounded-t-[3rem]">
                                         <div>
-                                            <h2 className="text-3xl font-black uppercase tracking-tighter italic leading-none mb-1">New Expedition</h2>
-                                            <p className="text-[10px] text-emerald-300 font-black uppercase tracking-widest">RECORDING XJ95 EXPEDITION COORDS</p>
+                                            <h2 className="text-3xl font-black uppercase tracking-tighter italic leading-none mb-1">New Trail</h2>
+                                            <p className="text-[10px] text-emerald-300 font-black uppercase tracking-widest uppercase">Recording XJ95 expedition coords</p>
                                         </div>
                                         <button type="button" onClick={() => setShowModal(false)} className="text-white/60 hover:text-white text-4xl font-light">&times;</button>
                                     </div>
@@ -367,24 +409,24 @@
                                         </div>
                                         <div className="grid grid-cols-2 gap-6">
                                             <div>
-                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Province</label>
+                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block text-center sm:text-left">Province</label>
                                                 <select required className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none focus:ring-4 focus:ring-emerald-700/10 outline-none font-black uppercase text-sm appearance-none" value={formData.province} onChange={e => setFormData({...formData, province: e.target.value})}>
                                                     <option value="">SELECT REGION</option>
                                                     {THAI_PROVINCES.map(p => <option key={p} value={p}>{p}</option>)}
                                                 </select>
                                             </div>
                                             <div>
-                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Expedition Date</label>
+                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block text-center sm:text-left">Expedition Date</label>
                                                 <input type="date" required className="w-full px-6 py-4 rounded-2xl bg-slate-50 font-bold" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} />
                                             </div>
                                         </div>
                                         <div className="grid grid-cols-2 gap-6">
                                             <div>
-                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Duration (Days)</label>
+                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block text-center sm:text-left">Duration (Days)</label>
                                                 <input type="number" min="1" className="w-full px-6 py-4 rounded-2xl bg-slate-50 font-black" value={formData.duration} onChange={e => setFormData({...formData, duration: e.target.value})} />
                                             </div>
                                             <div>
-                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Distance (KM)</label>
+                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block text-center sm:text-left">Distance (KM)</label>
                                                 <input type="number" min="0" className="w-full px-6 py-4 rounded-2xl bg-slate-50 font-black" value={formData.distance} onChange={e => setFormData({...formData, distance: e.target.value})} />
                                             </div>
                                         </div>
@@ -406,7 +448,6 @@
                         </div>
                     )}
 
-                    {/* Mobile Floating Add Button */}
                     <button onClick={() => setShowModal(true)} className="lg:hidden fixed bottom-8 right-8 bg-emerald-900 text-white w-20 h-20 rounded-[2rem] flex items-center justify-center shadow-[0_20px_50px_rgba(5,150,105,0.4)] z-10 active:scale-90 transition-all">
                         <Icon name="Plus" size={40} />
                     </button>
