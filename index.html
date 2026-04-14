@@ -126,8 +126,9 @@
                     setLoading(true);
                     const res = await fetch(scriptUrl);
                     const data = await res.json();
-                    setTrips(data.trips.filter(item => item.id));
-                    setMaintenanceLogs(data.maintenance.filter(item => item.id));
+                    // ตรวจสอบโครงสร้างข้อมูลให้ยืดหยุ่นขึ้น
+                    setTrips(Array.isArray(data.trips) ? data.trips.filter(t => Object.keys(t).length > 0) : []);
+                    setMaintenanceLogs(Array.isArray(data.maintenance) ? data.maintenance.filter(m => Object.keys(m).length > 0) : []);
                 } catch (err) { console.error("Fetch Error:", err); }
                 finally { setLoading(false); }
             };
@@ -147,7 +148,7 @@
             const handleAddTrip = async (e) => {
                 e.preventDefault();
                 try {
-                    await fetch(scriptUrl, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...formData, type: "trip", action: "add" }) });
+                    await fetch(scriptUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ ...formData, type: "trip", action: "add" }) });
                     setShowTripModal(false);
                     setTimeout(fetchData, 1500);
                 } catch (err) { console.error(err); }
@@ -156,7 +157,7 @@
             const handleAddPM = async (e) => {
                 e.preventDefault();
                 try {
-                    await fetch(scriptUrl, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...pmFormData, taskName: selectedTask.name, type: "pm", action: "add" }) });
+                    await fetch(scriptUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ ...pmFormData, taskName: selectedTask.name, type: "pm", action: "add" }) });
                     setShowPMModal(false);
                     setTimeout(fetchData, 1500);
                 } catch (err) { console.error(err); }
@@ -172,7 +173,7 @@
 
             const provinceStats = useMemo(() => {
                 const counts = {};
-                trips.forEach(t => { counts[t.province] = (counts[t.province] || 0) + 1; });
+                trips.forEach(t => { if(t.province) counts[t.province] = (counts[t.province] || 0) + 1; });
                 return counts;
             }, [trips]);
 
@@ -264,7 +265,7 @@
                                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Expedition Time</span>
                                     <Icon name="Clock" size={18} className="text-emerald-700" />
                                 </div>
-                                <div className="text-3xl font-black text-slate-800">{stats.days} <span className="text-sm font-bold opacity-30 uppercase">Days</span></div>
+                                <div className="text-3xl font-black">{stats.days} <span className="text-sm font-bold opacity-30 uppercase">Days</span></div>
                             </Card>
                             <Card className="p-6">
                                 <div className="flex justify-between items-center mb-2">
@@ -295,17 +296,17 @@
                                 {maintenanceLogs.length === 0 ? (
                                     <Card className="p-20 text-center text-slate-400 font-bold uppercase italic">No Service Records Found.</Card>
                                 ) : (
-                                    maintenanceLogs.sort((a,b) => new Date(b.date) - new Date(a.date)).map(log => (
-                                        <Card key={log.id} className="p-8 border-l-8 border-emerald-800 flex items-center justify-between">
+                                    maintenanceLogs.sort((a,b) => new Date(b.date) - new Date(a.date)).map((log, idx) => (
+                                        <Card key={log.id || idx} className="p-8 border-l-8 border-emerald-800 flex items-center justify-between">
                                             <div className="flex-1">
                                                 <div className="flex items-center gap-3 mb-1">
                                                     <Icon name="Wrench" size={16} className="text-emerald-700" />
-                                                    <h3 className="text-xl font-black uppercase text-slate-800 tracking-tight">{log.taskName}</h3>
+                                                    <h3 className="text-xl font-black uppercase text-slate-800 tracking-tight">{log.taskName || 'Unknown Task'}</h3>
                                                 </div>
                                                 <div className="flex gap-4 text-[10px] font-black uppercase text-slate-400">
-                                                    <span>{new Date(log.date).toLocaleDateString('th-TH')}</span>
+                                                    <span>{log.date ? new Date(log.date).toLocaleDateString('th-TH') : 'No Date'}</span>
                                                     <span>•</span>
-                                                    <span className="text-emerald-700">{log.mileage.toLocaleString()} KM</span>
+                                                    <span className="text-emerald-700">{log.mileage ? Number(log.mileage).toLocaleString() : '0'} KM</span>
                                                 </div>
                                                 {log.notes && <p className="mt-3 text-sm text-slate-500 italic font-medium leading-relaxed bg-slate-50 p-4 rounded-xl">"{log.notes}"</p>}
                                             </div>
