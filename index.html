@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XJ95 Journey - Sheets Edition</title>
+    <title>XJ95 Journey - Expedition Ready</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -15,8 +15,8 @@
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #059669; }
-        .animate-fade-in { animation: fadeIn 0.5s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -30,6 +30,32 @@
         const ACCESS_PASSWORD = "xj1995";
 
         const THAI_PROVINCES = ["กรุงเทพมหานคร", "กระบี่", "กาญจนบุรี", "กาฬสินธุ์", "กำแพงเพชร", "ขอนแก่น", "จันทบุรี", "ฉะเชิงเทรา", "ชลบุรี", "ชัยนาท", "ชัยภูมิ", "ชุมพร", "เชียงราย", "เชียงใหม่", "ตรัง", "ตราด", "ตาก", "นครนายก", "นครปฐม", "นครพนม", "นครราชสีมา", "นครศรีธรรมราช", "นครสวรรค์", "นนทบุรี", "นราธิวาส", "น่าน", "บึงกาฬ", "บุรีรัมย์", "ปทุมธานี", "ประจวบคีรีขันธ์", "ปราจีนบุรี", "ปัตตานี", "พระนครศรีอยุธยา", "พะเยา", "พังงา", "พัทลุง", "พิจิตร", "พิษณุโลก", "เพชรบุรี", "เพชรบูรณ์", "แพร่", "ภูเก็ต", "มหาสารคาม", "มุกดาหาร", "แม่ฮ่องสอน", "ยโสธร", "ยะลา", "ร้อยเอ็ด", "ระนอง", "ระยอง", "ราชบุรี", "ลพบุรี", "ลำปาง", "ลำพูน", "เลย", "ศรีสะเกษ", "สกลนคร", "สงขลา", "สตูล", "สมุทรปราการ", "สมุทรสงคราม", "สมุทรสาคร", "สระแก้ว", "สระบุรี", "สิงห์บุรี", "สุโขทัย", "สุพรรณบุรี", "สุราษฎร์ธานี", "สุรินทร์", "หนองคาย", "หนองบัวลำภู", "อ่างทอง", "อำนาจเจริญ", "อุดรธานี", "อุตรดิตถ์", "อุทัยธานี", "อุบลราชธานี"];
+
+        const MAINTENANCE_PLAN = [
+            { category: "1. Routine Maintenance", interval: "5,000 – 8,000 km", tasks: [
+                { id: "oil", name: "Oil & Filter Change", info: "ใช้น้ำมัน 10W-30 หรือ 10W-40 ที่มี Zinc สูงสำหรับเครื่อง 4.0L" },
+                { id: "lube", name: "Chassis Lubrication", info: "อัดจาระบีลูกหมากต่างๆ สำคัญมากในช่วงหน้าฝนหรือลุยน้ำ" },
+                { id: "tire", name: "Tire Rotation", info: "สลับยางทุก 8,000 กม. เพื่อการยึดเกาะระบบ 4WD ที่สมดุล" },
+                { id: "fluid", name: "Fluid Levels Check", info: "ตรวจระดับของเหลวรายเดือน ระวังรอยรั่วที่ซีลท้ายเครื่อง" }
+            ]},
+            { category: "2. Intermediate Service", interval: "Annual / 24,000 km", tasks: [
+                { id: "air", name: "Air Filter Replacement", info: "เปลี่ยนกรองอากาศ (บ่อยขึ้นถ้าวิ่งทางฝุ่น/Off-road)" },
+                { id: "cool_insp", name: "Cooling System Inspection", info: "ตรวจเช็กท่อยางและพัดลมไฟฟ้า (สำคัญมากสำหรับอากาศเมืองไทย)" },
+                { id: "brake", name: "Brake Inspection", info: "ตรวจเช็กผ้าเบรกหน้าและฝักเบรกหลัง" },
+                { id: "batt", name: "Battery & Terminals", info: "ทำความสะอาดขั้วแบตเตอรี่และสายกราวด์ทุกปี" }
+            ]},
+            { category: "3. Major Service", interval: "2 Years / 48,000 km", tasks: [
+                { id: "trans", name: "Transmission Fluid (ATF)", info: "เปลี่ยนถ่ายน้ำมันเกียร์ (Dexron III/Mercon)" },
+                { id: "tcase", name: "Transfer Case Service", info: "เปลี่ยนถ่ายน้ำมันเกียร์ Transfer สำหรับระบบ 4WD" },
+                { id: "diff", name: "Differentials Gear Oil", info: "น้ำมันเฟืองท้าย 80W-90 (เติมสาร LSD ถ้ามี)" },
+                { id: "tune", name: "Ignition Tune-Up", info: "เปลี่ยนหัวเทียน (Copper), ฝาครอบจานจ่าย, หัวโรเตอร์ และสายคอยล์" }
+            ]},
+            { category: "4. Long-Term Reliability", interval: "96,000 km", tasks: [
+                { id: "belt", name: "Serpentine Belt", info: "เปลี่ยนสายพานหน้าเครื่อง ป้องกันสายพานขาดกลางทาง" },
+                { id: "flush", name: "Cooling System Flush", info: "ล้างระบบหล่อเย็น ใช้ส่วนผสมน้ำกลั่น 50/50" },
+                { id: "cps", name: "Crank Position Sensor", info: "พิจารณาเปลี่ยนเชิงป้องกันหรือพกอะไหล่สำรองไว้" }
+            ]}
+        ];
 
         const MAP_GRID = [
             [null, null, "เชียงราย", "พะเยา", "น่าน"],
@@ -82,11 +108,7 @@
                         <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                     </React.Fragment>
                 ),
-                Trash2: (
-                    <React.Fragment>
-                        <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2M10 11v6M14 11v6" />
-                    </React.Fragment>
-                ),
+                Trash2: <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2M10 11v6M14 11v6" />,
                 Calendar: (
                     <React.Fragment>
                         <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
@@ -107,7 +129,13 @@
                         <circle cx="18" cy="5" r="3"/>
                     </React.Fragment>
                 ),
-                MapPin: <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                Wrench: <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>,
+                Settings: (
+                    <React.Fragment>
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </React.Fragment>
+                )
             };
             return (
                 <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -117,7 +145,7 @@
         };
 
         const Card = ({ children, className = "" }) => (
-            <div className={`bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden ${className}`}>
+            <div className={`bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden ${className}`}>
                 {children}
             </div>
         );
@@ -127,23 +155,29 @@
             const [password, setPassword] = useState('');
             const [loginError, setLoginError] = useState(false);
             const [trips, setTrips] = useState([]);
+            const [maintenanceLogs, setMaintenanceLogs] = useState([]);
             const [loading, setLoading] = useState(true);
             const [currentView, setCurrentView] = useState('map');
-            const [showModal, setShowModal] = useState(false);
+            const [showTripModal, setShowTripModal] = useState(false);
+            const [showPMModal, setShowPMModal] = useState(false);
+            const [selectedTask, setSelectedTask] = useState(null);
+            
             const [formData, setFormData] = useState({ title: '', province: '', date: new Date().toISOString().split('T')[0], duration: 1, distance: 0, imageUrl: '', notes: '' });
+            const [pmFormData, setPmFormData] = useState({ mileage: '', date: new Date().toISOString().split('T')[0], notes: '' });
 
-            const fetchTrips = async () => {
+            const fetchData = async () => {
                 try {
                     setLoading(true);
                     const res = await fetch(scriptUrl);
                     const data = await res.json();
-                    setTrips(data.filter(item => item.id));
+                    setTrips(data.trips.filter(item => item.id));
+                    setMaintenanceLogs(data.maintenance.filter(item => item.id));
                 } catch (err) { console.error("Fetch Error:", err); }
                 finally { setLoading(false); }
             };
 
             useEffect(() => {
-                if (isAuthenticated) fetchTrips();
+                if (isAuthenticated) fetchData();
             }, [isAuthenticated]);
 
             const handleLogin = (e) => {
@@ -151,35 +185,47 @@
                 if (password === ACCESS_PASSWORD) {
                     setIsAuthenticated(true);
                     sessionStorage.setItem('xj95_auth', 'true');
-                } else {
-                    setLoginError(true);
-                }
+                } else { setLoginError(true); }
             };
 
-            const handleAdd = async (e) => {
+            const handleAddTrip = async (e) => {
                 e.preventDefault();
                 try {
                     await fetch(scriptUrl, {
                         method: 'POST',
                         mode: 'no-cors',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ ...formData, action: "add" })
+                        body: JSON.stringify({ ...formData, type: "trip", action: "add" })
                     });
-                    setShowModal(false);
-                    setTimeout(fetchTrips, 1500);
+                    setShowTripModal(false);
+                    setTimeout(fetchData, 1500);
                 } catch (err) { console.error(err); }
             };
 
-            const handleDelete = async (id) => {
-                if (!window.confirm("ต้องการลบใช่หรือไม่?")) return;
+            const handleAddPM = async (e) => {
+                e.preventDefault();
                 try {
                     await fetch(scriptUrl, {
                         method: 'POST',
                         mode: 'no-cors',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ id, action: "delete" })
+                        body: JSON.stringify({ ...pmFormData, taskName: selectedTask.name, type: "pm", action: "add" })
                     });
-                    setTimeout(fetchTrips, 1000);
+                    setShowPMModal(false);
+                    setTimeout(fetchData, 1500);
+                } catch (err) { console.error(err); }
+            };
+
+            const handleDeleteTrip = async (id) => {
+                if (!window.confirm("ต้องการลบบันทึกการเดินทางนี้ใช่หรือไม่?")) return;
+                try {
+                    await fetch(scriptUrl, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id, type: "trip", action: "delete" })
+                    });
+                    setTimeout(fetchData, 1000);
                 } catch (err) { console.error(err); }
             };
 
@@ -198,6 +244,12 @@
                     pct: Math.round((visitedCount / 77) * 100)
                 };
             }, [trips, provinceStats]);
+
+            const getLastService = (taskName) => {
+                const logs = maintenanceLogs.filter(l => l.taskName === taskName);
+                if (logs.length === 0) return null;
+                return logs.sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+            };
 
             const getMapColor = (p) => {
                 const c = provinceStats[p] || 0;
@@ -218,15 +270,9 @@
                             </div>
                             <h1 className="text-4xl font-black text-white italic tracking-tighter mb-10 uppercase">XJ95 JOURNEY</h1>
                             <div className="bg-white p-10 rounded-[2.5rem] shadow-2xl">
-                                <form onSubmit={handleLogin} className="space-y-6">
+                                <form onSubmit={handleLogin} className="space-y-6 text-slate-900">
                                     <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 text-center">Access Key Required</label>
-                                    <input 
-                                        type="password" 
-                                        required 
-                                        className="w-full p-5 rounded-2xl bg-slate-50 border-2 border-transparent focus:border-emerald-600 outline-none text-center text-2xl font-bold tracking-widest transition-all" 
-                                        value={password} 
-                                        onChange={e => {setPassword(e.target.value); if(loginError) setLoginError(false);}} 
-                                    />
+                                    <input type="password" required className="w-full p-5 rounded-2xl bg-slate-50 border-2 border-transparent focus:border-emerald-600 outline-none text-center text-2xl font-bold tracking-widest transition-all" value={password} onChange={e => {setPassword(e.target.value); if(loginError) setLoginError(false);}} />
                                     {loginError && <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest animate-bounce text-center">Access Denied</p>}
                                     <button className="w-full py-5 bg-emerald-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-emerald-950 transition-all active:scale-95 shadow-xl shadow-emerald-100 flex items-center justify-center gap-2">
                                         Authenticate <Icon name="ChevronRight" size={18} />
@@ -245,15 +291,15 @@
                             <Icon name="Trees" size={24} />
                             <div>
                                 <h1 className="text-xl font-black italic tracking-tighter leading-none">XJ95 JOURNEY</h1>
-                                <p className="text-[9px] font-bold text-emerald-300 uppercase tracking-widest">Satellite Data Sync</p>
+                                <p className="text-[9px] font-bold text-emerald-300 uppercase tracking-widest leading-none">Off-road Sync</p>
                             </div>
                         </div>
                         <div className="flex items-center gap-3">
                             <div className="bg-emerald-950/50 p-1 rounded-xl flex gap-1">
                                 <button onClick={() => setCurrentView('map')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black tracking-widest transition-all ${currentView === 'map' ? 'bg-emerald-700 text-white shadow-sm' : 'text-emerald-400'}`}>MAP</button>
                                 <button onClick={() => setCurrentView('feed')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black tracking-widest transition-all ${currentView === 'feed' ? 'bg-emerald-700 text-white shadow-sm' : 'text-emerald-400'}`}>FEED</button>
+                                <button onClick={() => setCurrentView('pm')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black tracking-widest transition-all ${currentView === 'pm' ? 'bg-emerald-700 text-white shadow-sm' : 'text-emerald-400'}`}>PM</button>
                             </div>
-                            <button onClick={() => setShowModal(true)} className="bg-white text-emerald-900 px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg active:scale-95 transition-all hover:bg-emerald-50">+ RECORD</button>
                         </div>
                     </header>
 
@@ -287,7 +333,7 @@
                             </Card>
                             <Card className="p-6 bg-emerald-50 border-emerald-100 flex flex-col justify-center">
                                 <p className="text-[10px] font-black text-emerald-800 uppercase mb-1 tracking-widest">Status</p>
-                                <div className="text-xl font-black italic text-emerald-900 tracking-tighter uppercase leading-tight">
+                                <div className="text-xl font-black italic text-emerald-900 tracking-tighter uppercase leading-tight italic">
                                     {stats.count > 50 ? "LEGENDARY" : stats.count > 20 ? "VETERAN" : "EXPLORER"}
                                 </div>
                             </Card>
@@ -296,7 +342,45 @@
                         {loading ? (
                             <div className="flex flex-col items-center justify-center py-32 text-emerald-800 gap-4">
                                 <Icon name="Compass" size={48} className="animate-spin" />
-                                <span className="font-black text-xs tracking-[0.3em] uppercase">Syncing Sheet Data...</span>
+                                <span className="font-black text-xs tracking-[0.3em] uppercase">Syncing Satellite Data...</span>
+                            </div>
+                        ) : currentView === 'pm' ? (
+                            <div className="space-y-10 animate-fade-in text-slate-900">
+                                <div className="flex justify-between items-center">
+                                    <h2 className="text-3xl font-black italic uppercase tracking-tighter italic">Jeep Maintenance</h2>
+                                    <div className="flex items-center gap-2 text-emerald-700 font-bold text-xs bg-emerald-50 px-4 py-2 rounded-full border border-emerald-100">
+                                        <Icon name="Settings" size={14} /> XJ95 PM STATUS: ACTIVE
+                                    </div>
+                                </div>
+                                {MAINTENANCE_PLAN.map((section, sIdx) => (
+                                    <div key={sIdx} className="space-y-4">
+                                        <div className="flex items-baseline gap-4 border-b-4 border-emerald-900 pb-2">
+                                            <h3 className="text-xl font-black uppercase italic">{section.category}</h3>
+                                            <span className="text-emerald-600 font-black text-[10px] uppercase tracking-widest">{section.interval}</span>
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            {section.tasks.map(task => {
+                                                const lastService = getLastService(task.name);
+                                                return (
+                                                    <Card key={task.id} className="p-6 flex flex-col justify-between group hover:shadow-md transition-shadow">
+                                                        <div>
+                                                            <h4 className="text-lg font-black text-slate-800 mb-1">{task.name}</h4>
+                                                            <p className="text-xs text-slate-500 font-medium leading-relaxed mb-4">{task.info}</p>
+                                                        </div>
+                                                        <div className="flex justify-between items-end mt-4">
+                                                            <div className="text-[10px] font-black uppercase text-slate-400">
+                                                                Last Log: {lastService ? <span className="text-emerald-700">{new Date(lastService.date).toLocaleDateString()} ({lastService.mileage} km)</span> : "N/A"}
+                                                            </div>
+                                                            <button onClick={() => { setSelectedTask(task); setShowPMModal(true); }} className="bg-slate-900 text-white p-2.5 rounded-xl hover:bg-emerald-700 transition-colors shadow-lg">
+                                                                <Icon name="Wrench" size={16} />
+                                                            </button>
+                                                        </div>
+                                                    </Card>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         ) : currentView === 'map' ? (
                             <div className="space-y-8 animate-fade-in text-slate-900">
@@ -308,13 +392,14 @@
                                                     {row.map((p, pIdx) => {
                                                         if (!p) return <div key={pIdx} className="w-24 h-20"></div>;
                                                         const count = provinceStats[p] || 0;
+                                                        const colorClass = getMapColor(p);
                                                         return (
                                                             <div 
                                                                 key={pIdx} 
-                                                                className={`w-24 h-20 rounded-2xl flex flex-col items-center justify-center p-3 text-center transition-all duration-300 transform hover:-translate-y-2 group relative cursor-default ${getMapColor(p)}`}
+                                                                className={`w-24 h-20 rounded-2xl flex flex-col items-center justify-center p-3 text-center transition-all duration-300 transform hover:-translate-y-2 group relative cursor-default ${colorClass}`}
                                                             >
                                                                 <span className="text-[10px] font-black leading-tight uppercase tracking-tighter">{p}</span>
-                                                                {count > 0 && <span className="text-[10px] font-black mt-1 opacity-60">x{count}</span>}
+                                                                {count > 0 && <span className="text-[10px] font-black mt-1.5 opacity-60">x{count}</span>}
                                                             </div>
                                                         );
                                                     })}
@@ -349,7 +434,7 @@
                                                 <div className="p-10 text-slate-900">
                                                     <div className="flex justify-between items-start mb-6">
                                                         <h3 className="text-3xl font-black text-slate-800 tracking-tighter italic uppercase">{t.title}</h3>
-                                                        <button onClick={() => handleDelete(t.id)} className="p-3 text-slate-200 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all">
+                                                        <button onClick={() => handleDeleteTrip(t.id)} className="p-3 text-slate-200 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all">
                                                             <Icon name="Trash2" size={24} />
                                                         </button>
                                                     </div>
@@ -391,64 +476,64 @@
                         )}
                     </main>
 
-                    {showModal && (
+                    {/* PM Modal */}
+                    {showPMModal && (
                         <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-emerald-950/60 backdrop-blur-md animate-in fade-in duration-300 text-slate-900">
-                            <Card className="w-full max-w-xl relative z-10 animate-in zoom-in duration-300 border-none shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] rounded-[3rem]">
-                                <form onSubmit={handleAdd}>
-                                    <div className="p-10 bg-emerald-900 text-white flex justify-between items-center rounded-t-[3rem]">
-                                        <div>
-                                            <h2 className="text-3xl font-black uppercase tracking-tighter italic leading-none mb-1">New Trail</h2>
-                                            <p className="text-[10px] text-emerald-300 font-black uppercase tracking-widest uppercase">Recording XJ95 expedition coords</p>
-                                        </div>
-                                        <button type="button" onClick={() => setShowModal(false)} className="text-white/60 hover:text-white text-4xl font-light">&times;</button>
+                            <Card className="w-full max-w-md p-10 animate-in shadow-2xl border-none">
+                                <h2 className="text-2xl font-black italic uppercase mb-2 border-b-4 border-emerald-900 pb-2">Record Service</h2>
+                                <p className="text-[10px] font-black text-emerald-700 uppercase mb-8 tracking-widest italic leading-tight">{selectedTask?.name}</p>
+                                <form onSubmit={handleAddPM} className="space-y-6">
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Mileage (KM)</label>
+                                        <input required type="number" className="w-full p-4 rounded-2xl bg-slate-50 font-black outline-none border-2 border-transparent focus:border-emerald-600" value={pmFormData.mileage} onChange={e => setPmFormData({...pmFormData, mileage: e.target.value})} />
                                     </div>
-                                    <div className="p-10 space-y-8 max-h-[65vh] overflow-y-auto custom-scrollbar">
-                                        <div>
-                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Expedition Title</label>
-                                            <input required placeholder="E.G. MOUNTAIN TRAIL 101" className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none focus:ring-4 focus:ring-emerald-700/10 outline-none font-black uppercase tracking-tighter text-lg" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} />
-                                        </div>
-                                        <div className="grid grid-cols-2 gap-6">
-                                            <div>
-                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block text-center sm:text-left">Province</label>
-                                                <select required className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none focus:ring-4 focus:ring-emerald-700/10 outline-none font-black uppercase text-sm appearance-none" value={formData.province} onChange={e => setFormData({...formData, province: e.target.value})}>
-                                                    <option value="">SELECT REGION</option>
-                                                    {THAI_PROVINCES.map(p => <option key={p} value={p}>{p}</option>)}
-                                                </select>
-                                            </div>
-                                            <div>
-                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block text-center sm:text-left">Expedition Date</label>
-                                                <input type="date" required className="w-full px-6 py-4 rounded-2xl bg-slate-50 font-bold" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} />
-                                            </div>
-                                        </div>
-                                        <div className="grid grid-cols-2 gap-6">
-                                            <div>
-                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block text-center sm:text-left">Duration (Days)</label>
-                                                <input type="number" min="1" className="w-full px-6 py-4 rounded-2xl bg-slate-50 font-black" value={formData.duration} onChange={e => setFormData({...formData, duration: e.target.value})} />
-                                            </div>
-                                            <div>
-                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block text-center sm:text-left">Distance (KM)</label>
-                                                <input type="number" min="0" className="w-full px-6 py-4 rounded-2xl bg-slate-50 font-black" value={formData.distance} onChange={e => setFormData({...formData, distance: e.target.value})} />
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Evidence Photo (URL)</label>
-                                            <input type="url" placeholder="HTTPS://..." className="w-full px-6 py-4 rounded-2xl bg-slate-50 font-bold" value={formData.imageUrl} onChange={e => setFormData({...formData, imageUrl: e.target.value})} />
-                                        </div>
-                                        <div>
-                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Journal Entry</label>
-                                            <textarea rows="4" placeholder="DESCRIBE THE WILDERNESS..." className="w-full px-6 py-4 rounded-2xl bg-slate-50 outline-none resize-none font-bold text-slate-600 leading-relaxed" value={formData.notes} onChange={e => setFormData({...formData, notes: e.target.value})}></textarea>
-                                        </div>
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Date</label>
+                                        <input required type="date" className="w-full p-4 rounded-2xl bg-slate-50 font-black outline-none border-2 border-transparent focus:border-emerald-600" value={pmFormData.date} onChange={e => setPmFormData({...pmFormData, date: e.target.value})} />
                                     </div>
-                                    <div className="p-10 bg-slate-50 flex gap-6 rounded-b-[3rem]">
-                                        <button type="button" onClick={() => setShowModal(false)} className="flex-1 py-4 text-slate-400 font-black uppercase tracking-widest hover:text-slate-600 transition-colors">Abort</button>
-                                        <button type="submit" className="flex-1 py-5 bg-emerald-900 text-white rounded-2xl font-black uppercase tracking-widest shadow-2xl shadow-emerald-200 hover:bg-emerald-950 transition-all active:scale-95">Record Trip</button>
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Notes</label>
+                                        <textarea className="w-full p-4 rounded-2xl bg-slate-50 font-medium outline-none border-2 border-transparent focus:border-emerald-600" value={pmFormData.notes} onChange={e => setPmFormData({...pmFormData, notes: e.target.value})}></textarea>
+                                    </div>
+                                    <div className="flex gap-4 pt-4">
+                                        <button type="button" onClick={() => setShowPMModal(false)} className="flex-1 font-black text-slate-400 uppercase tracking-widest hover:text-slate-600">Cancel</button>
+                                        <button type="submit" className="flex-1 py-4 bg-emerald-900 text-white rounded-2xl font-black uppercase tracking-widest shadow-lg hover:bg-emerald-950">Save Record</button>
                                     </div>
                                 </form>
                             </Card>
                         </div>
                     )}
 
-                    <button onClick={() => setShowModal(true)} className="lg:hidden fixed bottom-8 right-8 bg-emerald-900 text-white w-20 h-20 rounded-[2rem] flex items-center justify-center shadow-[0_20px_50px_rgba(5,150,105,0.4)] z-10 active:scale-90 transition-all">
+                    {/* Trip Modal */}
+                    {showTripModal && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-emerald-950/60 backdrop-blur-md animate-in fade-in duration-300 text-slate-900 text-slate-900">
+                            <Card className="w-full max-w-xl p-10 animate-in overflow-y-auto max-h-[90vh] shadow-2xl border-none">
+                                <h2 className="text-2xl font-black italic uppercase mb-8 border-b-4 border-emerald-900 pb-2 italic leading-tight">New Trail Log</h2>
+                                <form onSubmit={handleAddTrip} className="space-y-6">
+                                    <input required placeholder="TRIP TITLE" className="w-full p-4 rounded-2xl bg-slate-50 font-black outline-none border-2 border-transparent focus:border-emerald-600 uppercase tracking-widest" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} />
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <select required className="p-4 rounded-2xl bg-slate-50 font-black outline-none border-2 border-transparent focus:border-emerald-600" value={formData.province} onChange={e => setFormData({...formData, province: e.target.value})}>
+                                            <option value="">PROVINCE</option>
+                                            {THAI_PROVINCES.map(p => <option key={p} value={p}>{p}</option>)}
+                                        </select>
+                                        <input type="date" className="p-4 rounded-2xl bg-slate-50 font-black outline-none border-2 border-transparent focus:border-emerald-600" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} />
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <input type="number" placeholder="DAYS" className="p-4 rounded-2xl bg-slate-50 font-black outline-none border-2 border-transparent focus:border-emerald-600" value={formData.duration} onChange={e => setFormData({...formData, duration: e.target.value})} />
+                                        <input type="number" placeholder="DISTANCE (KM)" className="p-4 rounded-2xl bg-slate-50 font-black outline-none border-2 border-transparent focus:border-emerald-600" value={formData.distance} onChange={e => setFormData({...formData, distance: e.target.value})} />
+                                    </div>
+                                    <input placeholder="IMAGE URL" className="w-full p-4 rounded-2xl bg-slate-50 font-black outline-none border-2 border-transparent focus:border-emerald-600" value={formData.imageUrl} onChange={e => setFormData({...formData, imageUrl: e.target.value})} />
+                                    <textarea placeholder="JOURNAL ENTRY" className="w-full p-4 rounded-2xl bg-slate-50 font-medium outline-none border-2 border-transparent focus:border-emerald-600" value={formData.notes} onChange={e => setFormData({...formData, notes: e.target.value})}></textarea>
+                                    <div className="flex gap-4">
+                                        <button type="button" onClick={() => setShowTripModal(false)} className="flex-1 font-black text-slate-400 uppercase tracking-widest hover:text-slate-600">Abort</button>
+                                        <button type="submit" className="flex-1 py-4 bg-emerald-900 text-white rounded-2xl font-black uppercase tracking-widest shadow-lg">Record</button>
+                                    </div>
+                                </form>
+                            </Card>
+                        </div>
+                    )}
+
+                    <button onClick={() => setShowTripModal(true)} className="lg:hidden fixed bottom-8 right-8 bg-emerald-900 text-white w-20 h-20 rounded-[2rem] flex items-center justify-center shadow-[0_20px_50px_rgba(5,150,105,0.4)] z-10 active:scale-90 transition-all">
                         <Icon name="Plus" size={40} />
                     </button>
                 </div>
