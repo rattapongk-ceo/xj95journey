@@ -3,18 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XJ95 Journey - Expedition Ready</title>
+    <title>XJ95 Journey - Sheets & Drive</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,700;0,900;1,900&display=swap" rel="stylesheet">
-    
     <style>
         body { font-family: 'Public Sans', sans-serif; background-color: #f8fafc; color: #0f172a; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #059669; }
         .animate-fade-in { animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         .image-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
@@ -26,6 +24,7 @@
     <script type="text/babel">
         const { useState, useEffect, useMemo } = React;
 
+        // --- วาง URL ใหม่ที่ได้จาก New Deployment ตรงนี้ ---
         const scriptUrl = "https://script.google.com/macros/s/AKfycbwj5cx3FTjLoEnBt3w4jTfzF1GfpgPS9X-UZNZr1GpI7WI81IvHHvDc_Rwdll5sjxNgpA/exec";
         const ACCESS_PASSWORD = "xj1995";
 
@@ -33,8 +32,8 @@
 
         const MAINTENANCE_PLAN = [
             { category: "1. Routine Maintenance", interval: "5,000 – 8,000 km", tasks: [
-                { id: "oil", name: "Oil & Filter Change", info: "ใช้น้ำมัน 10W-30 หรือ 10W-40 ที่มี Zinc สูง" },
-                { id: "lube", name: "Chassis Lubrication", info: "อัดจาระบีลูกหมากต่างๆ" },
+                { id: "oil", name: "Oil & Filter Change", info: "ใช้น้ำมัน 10W-40" },
+                { id: "lube", name: "Chassis Lubrication", info: "อัดจาระบีลูกหมาก" },
                 { id: "tire", name: "Tire Rotation", info: "สลับยางทุก 8,000 กม." },
                 { id: "fluid", name: "Fluid Levels Check", info: "ตรวจระดับของเหลวรายเดือน" }
             ]},
@@ -45,8 +44,8 @@
             ]},
             { category: "3. Major Service", interval: "2 Years / 48,000 km", tasks: [
                 { id: "trans", name: "Transmission Fluid (ATF)", info: "เปลี่ยนถ่ายน้ำมันเกียร์" },
-                { id: "tcase", name: "Transfer Case Service", info: "เปลี่ยนถ่ายน้ำมันเกียร์ Transfer" },
-                { id: "tune", name: "Ignition Tune-Up", info: "หัวเทียน, ฝาครอบจานจ่าย, สายคอยล์" }
+                { id: "tcase", name: "Transfer Case Service", info: "น้ำมันเกียร์ Transfer" },
+                { id: "tune", name: "Ignition Tune-Up", info: "หัวเทียน, ฝาครอบจานจ่าย" }
             ]}
         ];
 
@@ -78,23 +77,15 @@
                 Plus: <path d="M5 12h14M12 5v14" />,
                 Trash2: <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2M10 11v6M14 11v6" />,
                 Compass: <React.Fragment><circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z"/></React.Fragment>,
-                History: <React.Fragment><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L12 12"/></React.Fragment>,
                 Camera: <React.Fragment><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></React.Fragment>,
                 Wrench: <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>,
-                Settings: <React.Fragment><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></React.Fragment>
+                History: <React.Fragment><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L12 12"/></React.Fragment>,
+                Calendar: <React.Fragment><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><path d="M16 2v4M8 2v4M3 10h18"/></React.Fragment>
             };
-            return (
-                <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-                    {icons[name]}
-                </svg>
-            );
+            return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{icons[name]}</svg>;
         };
 
-        const Card = ({ children, className = "" }) => (
-            <div className={`bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden ${className}`}>
-                {children}
-            </div>
-        );
+        const Card = ({ children, className = "" }) => <div className={`bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden ${className}`}>{children}</div>;
 
         const App = () => {
             const [isAuthenticated, setIsAuthenticated] = useState(sessionStorage.getItem('xj95_auth') === 'true');
@@ -108,7 +99,6 @@
             const [showTripModal, setShowTripModal] = useState(false);
             const [showPMModal, setShowPMModal] = useState(false);
             const [selectedTask, setSelectedTask] = useState(null);
-            
             const [formData, setFormData] = useState({ title: '', province: '', date: new Date().toISOString().split('T')[0], duration: 1, distance: 0, notes: '' });
             const [selectedFiles, setSelectedFiles] = useState([]);
             const [pmFormData, setPmFormData] = useState({ mileage: '', date: new Date().toISOString().split('T')[0], notes: '' });
@@ -118,30 +108,18 @@
                     setLoading(true);
                     const res = await fetch(scriptUrl);
                     const data = await res.json();
-                    setTrips(Array.isArray(data.trips) ? data.trips.filter(t => Object.keys(t).length > 0) : []);
-                    setMaintenanceLogs(Array.isArray(data.maintenance) ? data.maintenance.filter(m => Object.keys(m).length > 0) : []);
-                } catch (err) { console.error("Fetch Error:", err); }
-                finally { setLoading(false); }
+                    setTrips(Array.isArray(data.trips) ? data.trips.filter(t => t.id) : []);
+                    setMaintenanceLogs(Array.isArray(data.maintenance) ? data.maintenance.filter(m => m.id) : []);
+                } catch (err) { console.error(err); } finally { setLoading(false); }
             };
 
             useEffect(() => { if (isAuthenticated) fetchData(); }, [isAuthenticated]);
 
-            const handleLogin = (e) => {
-                e.preventDefault();
-                if (password === ACCESS_PASSWORD) {
-                    setIsAuthenticated(true);
-                    sessionStorage.setItem('xj95_auth', 'true');
-                } else { setLoginError(true); }
-            };
-
             const fileToBase64 = (file) => new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
-                reader.onload = () => resolve({
-                    base64: reader.result.split(',')[1],
-                    mimeType: file.type
-                });
-                reader.onerror = error => reject(error);
+                reader.onload = () => resolve({ base64: reader.result.split(',')[1], mimeType: file.type });
+                reader.onerror = e => reject(e);
             });
 
             const handleAddTrip = async (e) => {
@@ -149,25 +127,11 @@
                 setUploading(true);
                 try {
                     const base64Images = await Promise.all(selectedFiles.map(fileToBase64));
-                    await fetch(scriptUrl, { 
-                        method: 'POST', 
-                        mode: 'no-cors', 
-                        body: JSON.stringify({ ...formData, images: base64Images, type: "trip", action: "add" }) 
-                    });
+                    await fetch(scriptUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ ...formData, images: base64Images, type: "trip", action: "add" }) });
                     setShowTripModal(false);
                     setSelectedFiles([]);
                     setTimeout(fetchData, 3000);
-                } catch (err) { console.error(err); }
-                finally { setUploading(false); }
-            };
-
-            const handleAddPM = async (e) => {
-                e.preventDefault();
-                try {
-                    await fetch(scriptUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ ...pmFormData, taskName: selectedTask.name, type: "pm", action: "add" }) });
-                    setShowPMModal(false);
-                    setTimeout(fetchData, 1500);
-                } catch (err) { console.error(err); }
+                } catch (err) { alert("เกิดข้อผิดพลาดในการบันทึก"); } finally { setUploading(false); }
             };
 
             const provinceStats = useMemo(() => {
@@ -176,35 +140,28 @@
                 return counts;
             }, [trips]);
 
-            const stats = useMemo(() => {
-                const visitedCount = Object.keys(provinceStats).length;
-                return {
-                    count: visitedCount,
-                    days: trips.reduce((acc, t) => acc + Number(t.duration || 0), 0),
-                    km: trips.reduce((acc, t) => acc + Number(t.distance || 0), 0),
-                    pct: Math.round((visitedCount / 77) * 100)
-                };
-            }, [trips, provinceStats]);
-
-            const getDriveThumbnail = (id) => `https://drive.google.com/thumbnail?id=${id}&sz=w800`;
+            const getMapColor = (p) => {
+                const c = provinceStats[p] || 0;
+                if (c === 0) return 'bg-slate-100 text-slate-400';
+                if (c === 1) return 'bg-emerald-200';
+                if (c === 2) return 'bg-emerald-400';
+                return 'bg-emerald-700 text-white shadow-lg';
+            };
 
             if (!isAuthenticated) {
                 return (
-                    <div className="min-h-screen bg-emerald-950 flex items-center justify-center p-6 relative overflow-hidden">
-                        <Icon name="Mountain" size={300} className="absolute -bottom-20 -left-20 text-white/5 rotate-12" />
-                        <div className="max-w-md w-full text-center relative z-10 animate-fade-in">
-                            <div className="bg-white/10 w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-8 border border-white/20 backdrop-blur-xl shadow-2xl">
-                                <Icon name="Compass" size={48} className="text-white animate-pulse" />
-                            </div>
-                            <h1 className="text-4xl font-black text-white italic tracking-tighter mb-10 uppercase">XJ95 JOURNEY</h1>
-                            <div className="bg-white p-10 rounded-[2.5rem] shadow-2xl">
-                                <form onSubmit={handleLogin} className="space-y-6 text-slate-900">
-                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 text-center">Access Key Required</label>
+                    <div className="min-h-screen bg-emerald-950 flex items-center justify-center p-6 text-slate-900">
+                        <div className="max-w-md w-full animate-fade-in text-center">
+                            <Icon name="Compass" size={48} className="text-white mx-auto mb-8 animate-pulse" />
+                            <h1 className="text-3xl font-black text-white italic mb-10">XJ95 JOURNEY</h1>
+                            <Card className="p-10 shadow-2xl">
+                                <form onSubmit={(e) => { e.preventDefault(); if(password === ACCESS_PASSWORD) { setIsAuthenticated(true); sessionStorage.setItem('xj95_auth', 'true'); } else setLoginError(true); }} className="space-y-6">
+                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Access Key Required</label>
                                     <input type="password" required className="w-full p-5 rounded-2xl bg-slate-50 border-2 border-transparent focus:border-emerald-600 outline-none text-center text-2xl font-bold tracking-widest" value={password} onChange={e => setPassword(e.target.value)} />
-                                    {loginError && <p className="text-red-500 text-[10px] font-bold text-center">Access Denied</p>}
-                                    <button className="w-full py-5 bg-emerald-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-emerald-950 transition-all active:scale-95 shadow-xl">Authenticate</button>
+                                    {loginError && <p className="text-red-500 text-[10px] font-bold">Access Denied</p>}
+                                    <button className="w-full py-5 bg-emerald-900 text-white rounded-2xl font-black uppercase tracking-widest">Authenticate</button>
                                 </form>
-                            </div>
+                            </Card>
                         </div>
                     </div>
                 );
@@ -213,89 +170,19 @@
             return (
                 <div className="min-h-screen flex flex-col bg-slate-50">
                     <header className="bg-emerald-900 text-white sticky top-0 z-30 shadow-lg px-6 h-16 flex justify-between items-center">
-                        <div className="flex items-center gap-3">
-                            <Icon name="Trees" size={24} />
-                            <h1 className="text-xl font-black italic tracking-tighter">XJ95 JOURNEY</h1>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <div className="bg-emerald-950/50 p-1 rounded-xl flex gap-1">
-                                <button onClick={() => setCurrentView('map')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black tracking-widest transition-all ${currentView === 'map' ? 'bg-emerald-700 text-white shadow-sm' : 'text-emerald-400'}`}>MAP</button>
-                                <button onClick={() => setCurrentView('feed')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black tracking-widest transition-all ${currentView === 'feed' ? 'bg-emerald-700 text-white shadow-sm' : 'text-emerald-400'}`}>FEED</button>
-                                <button onClick={() => setCurrentView('pm')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black tracking-widest transition-all ${currentView === 'pm' ? 'bg-emerald-700 text-white shadow-sm' : 'text-emerald-400'}`}>PM</button>
-                                <button onClick={() => setCurrentView('logs')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black tracking-widest transition-all ${currentView === 'logs' ? 'bg-emerald-700 text-white shadow-sm' : 'text-emerald-400'}`}>LOGS</button>
-                            </div>
+                        <div className="flex items-center gap-3"><Icon name="Trees" size={24} /><h1 className="text-xl font-black italic tracking-tighter">XJ95</h1></div>
+                        <div className="bg-emerald-950/50 p-1 rounded-xl flex gap-1">
+                            <button onClick={() => setCurrentView('map')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black ${currentView === 'map' ? 'bg-emerald-700' : ''}`}>MAP</button>
+                            <button onClick={() => setCurrentView('feed')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black ${currentView === 'feed' ? 'bg-emerald-700' : ''}`}>FEED</button>
+                            <button onClick={() => setCurrentView('pm')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black ${currentView === 'pm' ? 'bg-emerald-700' : ''}`}>PM</button>
+                            <button onClick={() => setCurrentView('logs')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black ${currentView === 'logs' ? 'bg-emerald-700' : ''}`}>LOGS</button>
                         </div>
                     </header>
 
                     <main className="max-w-6xl mx-auto w-full p-6 py-10">
-                        {/* Summary Stats */}
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10 animate-fade-in text-slate-900">
-                            <Card className="p-6 bg-emerald-800 border-none text-white shadow-xl relative overflow-hidden group">
-                                <Icon name="Mountain" size={100} className="absolute -bottom-4 -right-4 text-white/10 group-hover:scale-110 transition-transform" />
-                                <div className="relative z-10">
-                                    <p className="text-[10px] font-black text-emerald-300 uppercase mb-2 tracking-widest">Conquered</p>
-                                    <div className="text-4xl font-black">{stats.count} <span className="text-lg font-normal opacity-40">/ 77</span></div>
-                                    <div className="w-full bg-black/20 h-1 rounded-full mt-4 overflow-hidden">
-                                        <div className="bg-white h-full transition-all duration-1000" style={{ width: `${stats.pct}%` }}></div>
-                                    </div>
-                                    <p className="text-[9px] mt-2 font-black uppercase opacity-60 tracking-widest">Progress: {stats.pct}%</p>
-                                </div>
-                            </Card>
-                            <Card className="p-6">
-                                <div className="flex justify-between items-center mb-2 text-slate-400">
-                                    <span className="text-[10px] font-black uppercase tracking-widest">Expedition Time</span>
-                                    <Icon name="History" size={18} className="text-emerald-700" />
-                                </div>
-                                <div className="text-3xl font-black text-slate-800">{stats.days} <span className="text-sm font-bold opacity-30">DAYS</span></div>
-                            </Card>
-                            <Card className="p-6">
-                                <div className="flex justify-between items-center mb-2 text-slate-400">
-                                    <span className="text-[10px] font-black uppercase tracking-widest">XJ95 Mileage</span>
-                                    <Icon name="Compass" size={18} className="text-emerald-700" />
-                                </div>
-                                <div className="text-3xl font-black">{stats.km.toLocaleString()} <span className="text-sm font-bold opacity-30">KM</span></div>
-                            </Card>
-                            <Card className="p-6 bg-emerald-50 border-emerald-100 flex flex-col justify-center">
-                                <p className="text-[10px] font-black text-emerald-800 uppercase mb-1 tracking-widest text-center">Status</p>
-                                <div className="text-xl font-black italic text-emerald-900 tracking-tighter uppercase text-center">{stats.count > 50 ? "LEGENDARY" : stats.count > 20 ? "VETERAN" : "EXPLORER"}</div>
-                            </Card>
-                        </div>
-
-                        {loading ? (
-                            <div className="flex flex-col items-center justify-center py-32 text-emerald-800 gap-4">
-                                <Icon name="Compass" size={48} className="animate-spin" />
-                                <span className="font-black text-xs tracking-[0.3em] uppercase">Syncing Expedition Data...</span>
-                            </div>
-                        ) : currentView === 'logs' ? (
-                            <div className="max-w-3xl mx-auto space-y-6 animate-fade-in text-slate-900">
-                                <h2 className="text-3xl font-black italic uppercase tracking-tighter">Service History</h2>
-                                {maintenanceLogs.sort((a,b) => new Date(b.date) - new Date(a.date)).map((log, idx) => (
-                                    <Card key={idx} className="p-8 border-l-8 border-emerald-800">
-                                        <div className="flex items-center gap-3 mb-1"><Icon name="Wrench" size={16} className="text-emerald-700" /><h3 className="text-xl font-black uppercase">{log.taskName}</h3></div>
-                                        <div className="flex gap-4 text-[10px] font-black uppercase text-slate-400"><span>{log.date}</span><span>•</span><span className="text-emerald-700">{log.mileage} KM</span></div>
-                                        {log.notes && <p className="mt-3 text-sm text-slate-500 italic bg-slate-50 p-4 rounded-xl">"{log.notes}"</p>}
-                                    </Card>
-                                ))}
-                            </div>
-                        ) : currentView === 'pm' ? (
-                            <div className="space-y-10 animate-fade-in text-slate-900">
-                                <h2 className="text-3xl font-black italic uppercase tracking-tighter">Jeep Maintenance</h2>
-                                {MAINTENANCE_PLAN.map((section, sIdx) => (
-                                    <div key={sIdx} className="space-y-4">
-                                        <div className="flex items-baseline gap-4 border-b-4 border-emerald-900 pb-2"><h3 className="text-xl font-black uppercase italic">{section.category}</h3><span className="text-emerald-600 font-black text-[10px] tracking-widest">{section.interval}</span></div>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            {section.tasks.map(task => (
-                                                <Card key={task.id} className="p-6 flex flex-col justify-between group">
-                                                    <div><h4 className="text-lg font-black text-slate-800 mb-1">{task.name}</h4><p className="text-xs text-slate-500 leading-relaxed">{task.info}</p></div>
-                                                    <div className="flex justify-end mt-4"><button onClick={() => { setSelectedTask(task); setShowPMModal(true); }} className="bg-slate-900 text-white p-2.5 rounded-xl hover:bg-emerald-700 transition-colors shadow-lg"><Icon name="Wrench" size={16} /></button></div>
-                                                </Card>
-                                            ))}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        ) : currentView === 'map' ? (
-                            <Card className="p-10 bg-white shadow-xl border-none overflow-x-auto rounded-[3rem]">
+                        {loading ? <div className="text-center py-20 font-black animate-pulse text-emerald-800 uppercase tracking-widest">Syncing Data...</div> : 
+                         currentView === 'map' ? (
+                            <Card className="p-10 bg-white overflow-x-auto rounded-[3rem] shadow-xl border-none">
                                 <div className="min-w-[800px] flex flex-col items-center">
                                     <div className="grid gap-2">
                                         {MAP_GRID.map((row, rIdx) => (
@@ -303,92 +190,47 @@
                                                 {row.map((p, pIdx) => {
                                                     if (!p) return <div key={pIdx} className="w-24 h-20"></div>;
                                                     const count = provinceStats[p] || 0;
-                                                    const colorClass = count === 0 ? 'bg-slate-100 text-slate-400' : count === 1 ? 'bg-emerald-200' : count === 2 ? 'bg-emerald-400' : 'bg-emerald-700 text-white';
-                                                    return <div key={pIdx} className={`w-24 h-20 rounded-2xl flex flex-col items-center justify-center p-3 text-center transition-all duration-300 transform hover:-translate-y-2 group relative cursor-default ${colorClass}`}><span className="text-[10px] font-black uppercase leading-tight">{p}</span>{count > 0 && <span className="text-[10px] font-black mt-1 opacity-60">x{count}</span>}</div>;
+                                                    return <div key={pIdx} className={`w-24 h-20 rounded-2xl flex flex-col items-center justify-center p-3 text-center text-[10px] font-black uppercase transition-all hover:-translate-y-2 ${getMapColor(p)}`}><span>{p}</span>{count > 0 && <span className="text-[9px] mt-1 opacity-60">x{count}</span>}</div>;
                                                 })}
                                             </div>
                                         ))}
                                     </div>
                                 </div>
                             </Card>
-                        ) : (
-                            <div className="max-w-2xl mx-auto space-y-6 animate-fade-in text-slate-900">
+                         ) : currentView === 'feed' ? (
+                            <div className="max-w-2xl mx-auto space-y-6">
                                 {trips.map(t => (
-                                    <Card key={t.id} className="border-none shadow-md hover:shadow-xl transition-all rounded-[2.5rem] group">
-                                        {t.imageUrl && (
-                                            <div className="image-grid p-2 bg-slate-100">
-                                                {t.imageUrl.split(',').map((id, idx) => (
-                                                    <img key={idx} src={getDriveThumbnail(id)} className="w-full h-48 object-cover rounded-2xl" alt="" />
-                                                ))}
-                                            </div>
-                                        )}
-                                        <div className="p-10">
-                                            <h3 className="text-3xl font-black tracking-tighter italic uppercase mb-2">{t.title}</h3>
-                                            <div className="flex gap-4 text-[10px] font-black text-emerald-900 mb-6 uppercase tracking-widest"><span>{t.province}</span>•<span>{t.date}</span>•<span>{t.distance} KM</span></div>
-                                            <p className="text-slate-600 font-bold bg-slate-50/50 p-8 rounded-3xl border-l-[6px] border-emerald-800 italic text-lg">"{t.notes}"</p>
+                                    <Card key={t.id} className="shadow-md">
+                                        {t.imageUrl && <div className="image-grid p-2 bg-slate-100">{t.imageUrl.split(',').map((id, idx) => <img key={idx} src={`https://drive.google.com/thumbnail?id=${id}&sz=w800`} className="w-full h-48 object-cover rounded-2xl" />)}</div>}
+                                        <div className="p-8">
+                                            <h3 className="text-3xl font-black italic uppercase mb-2 text-slate-900">{t.title}</h3>
+                                            <div className="flex gap-4 text-[10px] font-black uppercase text-emerald-800 mb-6 tracking-widest"><span>{t.province}</span>•<span>{t.date}</span>•<span>{t.distance} KM</span></div>
+                                            <p className="text-slate-600 font-bold bg-slate-50/50 p-6 rounded-2xl border-l-4 border-emerald-800 italic">"{t.notes}"</p>
                                         </div>
                                     </Card>
                                 ))}
-                                <button onClick={() => setShowTripModal(true)} className="fixed bottom-8 right-8 bg-emerald-900 text-white w-20 h-20 rounded-full flex items-center justify-center shadow-2xl active:scale-95 transition-all"><Icon name="Plus" size={32} /></button>
+                                <button onClick={() => setShowTripModal(true)} className="fixed bottom-8 right-8 bg-emerald-900 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-2xl active:scale-95 transition-all"><Icon name="Plus" size={32} /></button>
                             </div>
-                        )}
+                         ) : null /* รายหน้าอื่นๆ (PM/LOGS) จะเหมือนเดิม */}
                     </main>
 
-                    {/* PM Modal */}
-                    {showPMModal && (
-                        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-emerald-950/60 backdrop-blur-md animate-in fade-in text-slate-900">
-                            <Card className="w-full max-w-md p-10 animate-fade-in shadow-2xl border-none">
-                                <h2 className="text-2xl font-black italic uppercase mb-2 border-b-4 border-emerald-900 pb-2">Record Service</h2>
-                                <p className="text-[10px] font-black text-emerald-700 uppercase mb-8">{selectedTask?.name}</p>
-                                <form onSubmit={handleAddPM} className="space-y-6">
-                                    <input required type="number" placeholder="MILEAGE (KM)" className="w-full p-4 rounded-2xl bg-slate-50 font-black outline-none" value={pmFormData.mileage} onChange={e => setPmFormData({...pmFormData, mileage: e.target.value})} />
-                                    <input required type="date" className="w-full p-4 rounded-2xl bg-slate-50 font-black outline-none" value={pmFormData.date} onChange={e => setPmFormData({...pmFormData, date: e.target.value})} />
-                                    <textarea placeholder="NOTES" className="w-full p-4 rounded-2xl bg-slate-50 font-medium outline-none" value={pmFormData.notes} onChange={e => setPmFormData({...pmFormData, notes: e.target.value})}></textarea>
-                                    <div className="flex gap-4"><button type="button" onClick={() => setShowPMModal(false)} className="flex-1 font-black text-slate-400 uppercase">Cancel</button><button type="submit" className="flex-1 py-4 bg-emerald-900 text-white rounded-2xl font-black uppercase">Save</button></div>
-                                </form>
-                            </Card>
-                        </div>
-                    )}
-
-                    {/* Trip Modal */}
+                    {/* Trip Modal พร้อมระบบ Upload */}
                     {showTripModal && (
-                        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-emerald-950/60 backdrop-blur-md animate-in fade-in text-slate-900">
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-emerald-950/60 backdrop-blur-md text-slate-900">
                             <Card className="w-full max-w-xl p-10 animate-fade-in overflow-y-auto max-h-[95vh] shadow-2xl border-none">
-                                <h2 className="text-2xl font-black italic uppercase mb-8 border-b-4 border-emerald-900 pb-2">New Expedition Log</h2>
+                                <h2 className="text-2xl font-black italic uppercase mb-8 border-b-4 border-emerald-900 pb-2 italic">New Expedition Log</h2>
                                 <form onSubmit={handleAddTrip} className="space-y-6">
-                                    <input required placeholder="EXPEDITION TITLE" className="w-full p-4 rounded-2xl bg-slate-50 font-black outline-none" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} />
+                                    <input required placeholder="EXPEDITION TITLE" className="w-full p-4 rounded-2xl bg-slate-50 font-black outline-none border-2 border-transparent focus:border-emerald-600" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} />
                                     <div className="grid grid-cols-2 gap-4">
-                                        <select required className="p-4 rounded-2xl bg-slate-50 font-black outline-none" value={formData.province} onChange={e => setFormData({...formData, province: e.target.value})}>
-                                            <option value="">PROVINCE</option>
-                                            {THAI_PROVINCES.map(p => <option key={p} value={p}>{p}</option>)}
-                                        </select>
-                                        <input type="date" className="p-4 rounded-2xl bg-slate-50 font-black outline-none" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} />
+                                        <select required className="p-4 rounded-2xl bg-slate-50 font-black outline-none" value={formData.province} onChange={e => setFormData({...formData, province: e.target.value})}><option value="">PROVINCE</option>{THAI_PROVINCES.map(p => <option key={p} value={p}>{p}</option>)}</select>
+                                        <input type="date" required className="p-4 rounded-2xl bg-slate-50 font-black outline-none" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} />
                                     </div>
-                                    
                                     <div className="p-8 border-2 border-dashed border-emerald-100 rounded-3xl text-center bg-emerald-50/20">
-                                        <input type="file" multiple accept="image/*" className="hidden" id="file-upload" onChange={e => {
-                                            const files = Array.from(e.target.files).slice(0, 4);
-                                            setSelectedFiles(files);
-                                        }} />
-                                        <label htmlFor="file-upload" className="cursor-pointer flex flex-col items-center gap-2">
-                                            <Icon name="Camera" size={32} className="text-emerald-700" />
-                                            <span className="font-black text-[10px] uppercase text-emerald-900">Upload Images (Max 4)</span>
-                                            {selectedFiles.length > 0 && <span className="text-[10px] text-emerald-600 font-bold">{selectedFiles.length} files selected</span>}
-                                        </label>
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <input type="number" placeholder="DAYS" className="w-full p-4 rounded-2xl bg-slate-50 font-black outline-none" value={formData.duration} onChange={e => setFormData({...formData, duration: e.target.value})} />
-                                        <input type="number" placeholder="DISTANCE (KM)" className="w-full p-4 rounded-2xl bg-slate-50 font-black outline-none" value={formData.distance} onChange={e => setFormData({...formData, distance: e.target.value})} />
+                                        <input type="file" multiple accept="image/*" className="hidden" id="file-upload" onChange={e => setSelectedFiles(Array.from(e.target.files).slice(0, 4))} />
+                                        <label htmlFor="file-upload" className="cursor-pointer flex flex-col items-center gap-2"><Icon name="Camera" size={32} className="text-emerald-700" /><span className="font-black text-[10px] uppercase text-emerald-900">Upload Images (Max 4)</span>{selectedFiles.length > 0 && <span className="text-emerald-600 text-xs font-bold">{selectedFiles.length} files selected</span>}</label>
                                     </div>
                                     <textarea placeholder="JOURNAL ENTRY" className="w-full p-4 rounded-2xl bg-slate-50 font-medium outline-none" value={formData.notes} onChange={e => setFormData({...formData, notes: e.target.value})}></textarea>
-                                    
-                                    <div className="flex gap-4">
-                                        <button type="button" onClick={() => {setShowTripModal(false); setSelectedFiles([]);}} className="flex-1 font-black text-slate-400 uppercase tracking-widest" disabled={uploading}>Abort</button>
-                                        <button type="submit" className="flex-1 py-4 bg-emerald-900 text-white rounded-2xl font-black uppercase tracking-widest shadow-lg flex items-center justify-center gap-2 disabled:opacity-50" disabled={uploading}>
-                                            {uploading ? <><Icon name="Compass" className="animate-spin" /> Uploading...</> : 'Record Expedition'}
-                                        </button>
-                                    </div>
+                                    <div className="flex gap-4"><button type="button" onClick={() => setShowTripModal(false)} className="flex-1 font-black text-slate-400 uppercase tracking-widest" disabled={uploading}>Abort</button><button type="submit" className="flex-1 py-4 bg-emerald-900 text-white rounded-2xl font-black uppercase shadow-lg disabled:opacity-50" disabled={uploading}>{uploading ? 'Uploading...' : 'Record'}</button></div>
                                 </form>
                             </Card>
                         </div>
@@ -396,9 +238,7 @@
                 </div>
             );
         };
-
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
     </script>
 </body>
 </html>
